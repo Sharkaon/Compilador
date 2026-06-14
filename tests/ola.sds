@@ -1,0 +1,2 @@
+saudacao = "Olá, mundo!";
+escrever(saudacao);

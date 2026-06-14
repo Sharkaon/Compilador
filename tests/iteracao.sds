@@ -1,0 +1,9 @@
+soma = 0;
+iteracao = 0;
+
+iterate (5) {
+    iteracao = iteracao + 1;
+    soma = soma + iteracao;
+};
+
+escrever(soma);

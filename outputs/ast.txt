@@ -1,0 +1,29 @@
+{
+  "type": "Program",
+  "declarations": [
+    {
+      "type": "AssignmentStmt",
+      "identifier": "saudacao",
+      "value": {
+        "type": "StringLiteral",
+        "value": "Olá, mundo!"
+      }
+    },
+    {
+      "type": "ExprStmt",
+      "expression": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "escrever"
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "saudacao"
+          }
+        ]
+      }
+    }
+  ]
+}

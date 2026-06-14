@@ -1,0 +1,14 @@
+factorial = (n: number) -> number {
+    branches
+        (n <= 1) -> { return 1; }
+        -> { return n * factorial(n - 1); }
+};
+
+i = 0;
+soma = 0;
+iterate (i <= 5) {
+    soma = soma + i;
+    i = i + 1;
+}
+
+print(soma);

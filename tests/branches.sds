@@ -1,0 +1,12 @@
+classifica = (nota: number) -> string {
+    branches
+        (nota >= 90) -> { return "A"; }
+        (nota >= 80) -> { return "B"; }
+        (nota >= 70) -> { return "C"; }
+        (nota >= 60) -> { return "D"; }
+        -> { return "F"; }
+};
+
+escrever(classifica(85));  // "B"
+escrever(classifica(95));  // "A"
+escrever(classifica(50));  // "F"

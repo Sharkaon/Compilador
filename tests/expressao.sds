@@ -1,0 +1,8 @@
+saudacao = "Olá, mundo!";
+escrever(saudacao);
+
+resultado = 10 + 5 * 2 - 8 / 4;
+escrever(resultado);
+
+texto = "Valor: " + resultado;
+escrever(texto);

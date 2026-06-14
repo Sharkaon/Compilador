@@ -1,0 +1,62 @@
+[
+  {
+    "type": "IDENT",
+    "lexeme": "saudacao",
+    "line": 1,
+    "column": 1
+  },
+  {
+    "type": "ASSIGN",
+    "lexeme": "=",
+    "line": 1,
+    "column": 10
+  },
+  {
+    "type": "STRING",
+    "lexeme": "\"Olá, mundo!\"",
+    "line": 1,
+    "column": 12
+  },
+  {
+    "type": "SEMICOLON",
+    "lexeme": ";",
+    "line": 1,
+    "column": 25
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "escrever",
+    "line": 2,
+    "column": 1
+  },
+  {
+    "type": "LPAREN",
+    "lexeme": "(",
+    "line": 2,
+    "column": 9
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "saudacao",
+    "line": 2,
+    "column": 10
+  },
+  {
+    "type": "RPAREN",
+    "lexeme": ")",
+    "line": 2,
+    "column": 18
+  },
+  {
+    "type": "SEMICOLON",
+    "lexeme": ";",
+    "line": 2,
+    "column": 19
+  },
+  {
+    "type": "EOF",
+    "lexeme": "",
+    "line": 3,
+    "column": 1
+  }
+]

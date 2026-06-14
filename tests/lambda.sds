@@ -1,0 +1,10 @@
+aplica = (f: (number) -> number, x: number) -> number {
+    return f(x);
+};
+
+dobro = (n: number) -> number {
+    return n * 2;
+};
+
+resultado = aplica(dobro, 21);
+escrever(resultado);   // 42
