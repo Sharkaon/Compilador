@@ -82,6 +82,7 @@ export class SemanticAnalyzer {
   private generateStartingCode() {
     this.emitRaw('#include <stdio.h>');
     this.emitRaw('#include <stdlib.h>');
+    this.emitRaw('#include <string.h>');
     this.emitRaw('');
     this.emitRaw('int main() {');
     this.indentLevel++;

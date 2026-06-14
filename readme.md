@@ -84,7 +84,9 @@ branches, iterate, return, number, true, false
 # Como Rodar
 
 Tendo node instalado no seu sistema, rodar `npx ts-node src/index.ts`
-Isso vai rodar o código em tests/programa.sds
+Isso vai compilar o código em tests/programa.sds
+O output será criado em outputs/code.c
+O código C pode ser executado com "npm run run-compiled"
 
 ### Programas padrão de teste
 Foram incluídos, na pasta tests/, alguns programas prontos na linguagem fantasia que podem ser executados com `npx ts-node src/index.ts <NÚMERO>`
