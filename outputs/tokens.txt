@@ -1,7 +1,7 @@
 [
   {
     "type": "IDENT",
-    "lexeme": "saudacao",
+    "lexeme": "resultado",
     "line": 1,
     "column": 1
   },
@@ -9,19 +9,67 @@
     "type": "ASSIGN",
     "lexeme": "=",
     "line": 1,
-    "column": 10
+    "column": 11
   },
   {
-    "type": "STRING",
-    "lexeme": "\"Olá, mundo!\"",
+    "type": "NUMBER",
+    "lexeme": "10",
     "line": 1,
-    "column": 12
+    "column": 13
+  },
+  {
+    "type": "PLUS",
+    "lexeme": "+",
+    "line": 1,
+    "column": 16
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "5",
+    "line": 1,
+    "column": 18
+  },
+  {
+    "type": "TIMES",
+    "lexeme": "*",
+    "line": 1,
+    "column": 20
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "2",
+    "line": 1,
+    "column": 22
+  },
+  {
+    "type": "MINUS",
+    "lexeme": "-",
+    "line": 1,
+    "column": 24
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "8",
+    "line": 1,
+    "column": 26
+  },
+  {
+    "type": "DIVISION",
+    "lexeme": "/",
+    "line": 1,
+    "column": 28
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "4",
+    "line": 1,
+    "column": 30
   },
   {
     "type": "SEMICOLON",
     "lexeme": ";",
     "line": 1,
-    "column": 25
+    "column": 31
   },
   {
     "type": "IDENT",
@@ -37,7 +85,7 @@
   },
   {
     "type": "IDENT",
-    "lexeme": "saudacao",
+    "lexeme": "resultado",
     "line": 2,
     "column": 10
   },
@@ -45,18 +93,84 @@
     "type": "RPAREN",
     "lexeme": ")",
     "line": 2,
-    "column": 18
+    "column": 19
   },
   {
     "type": "SEMICOLON",
     "lexeme": ";",
     "line": 2,
+    "column": 20
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "texto",
+    "line": 4,
+    "column": 1
+  },
+  {
+    "type": "ASSIGN",
+    "lexeme": "=",
+    "line": 4,
+    "column": 7
+  },
+  {
+    "type": "STRING",
+    "lexeme": "\"Valor: \"",
+    "line": 4,
+    "column": 9
+  },
+  {
+    "type": "PLUS",
+    "lexeme": "+",
+    "line": 4,
     "column": 19
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "resultado",
+    "line": 4,
+    "column": 21
+  },
+  {
+    "type": "SEMICOLON",
+    "lexeme": ";",
+    "line": 4,
+    "column": 30
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "escrever",
+    "line": 5,
+    "column": 1
+  },
+  {
+    "type": "LPAREN",
+    "lexeme": "(",
+    "line": 5,
+    "column": 9
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "texto",
+    "line": 5,
+    "column": 10
+  },
+  {
+    "type": "RPAREN",
+    "lexeme": ")",
+    "line": 5,
+    "column": 15
+  },
+  {
+    "type": "SEMICOLON",
+    "lexeme": ";",
+    "line": 5,
+    "column": 16
   },
   {
     "type": "EOF",
     "lexeme": "",
-    "line": 3,
-    "column": 1
+    "line": 5,
+    "column": 17
   }
 ]

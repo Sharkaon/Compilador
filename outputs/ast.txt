@@ -3,10 +3,42 @@
   "declarations": [
     {
       "type": "AssignmentStmt",
-      "identifier": "saudacao",
+      "identifier": "resultado",
       "value": {
-        "type": "StringLiteral",
-        "value": "Olá, mundo!"
+        "type": "AdditiveExpression",
+        "left": {
+          "type": "AdditiveExpression",
+          "left": {
+            "type": "NumberLiteral",
+            "value": 10
+          },
+          "operator": "+",
+          "right": {
+            "type": "MultiplicativeExpression",
+            "left": {
+              "type": "NumberLiteral",
+              "value": 5
+            },
+            "operator": "*",
+            "right": {
+              "type": "NumberLiteral",
+              "value": 2
+            }
+          }
+        },
+        "operator": "-",
+        "right": {
+          "type": "MultiplicativeExpression",
+          "left": {
+            "type": "NumberLiteral",
+            "value": 8
+          },
+          "operator": "/",
+          "right": {
+            "type": "NumberLiteral",
+            "value": 4
+          }
+        }
       }
     },
     {
@@ -20,7 +52,39 @@
         "arguments": [
           {
             "type": "Identifier",
-            "name": "saudacao"
+            "name": "resultado"
+          }
+        ]
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "texto",
+      "value": {
+        "type": "AdditiveExpression",
+        "left": {
+          "type": "StringLiteral",
+          "value": "Valor: "
+        },
+        "operator": "+",
+        "right": {
+          "type": "Identifier",
+          "name": "resultado"
+        }
+      }
+    },
+    {
+      "type": "ExprStmt",
+      "expression": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "escrever"
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "texto"
           }
         ]
       }

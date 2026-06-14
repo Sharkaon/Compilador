@@ -2,6 +2,7 @@
 import { Lexer } from './lexer/lexer';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Parser } from './parser/parser';
+import { SemanticAnalyzer } from './semantic/semantic-analyzer';
 
 const TEST_MAP = {
   '1': 'tests/ola.sds',
@@ -28,3 +29,7 @@ console.log(tokens);
 const ast = new Parser(tokens).parseProgram();
 writeFileSync('outputs/ast.txt', JSON.stringify(ast, null, 2));
 console.log(ast);
+
+const cCode = new SemanticAnalyzer().analyze(ast);
+writeFileSync('outputs/code.c', cCode);
+console.log(cCode);
