@@ -1,5 +1,10 @@
 export type DataType = 'number' | 'function' | 'string';
 
+export interface FunctionSignature {
+  paramTypes: DataType[];
+  returnType: DataType;
+}
+
 export interface SymbolInfo {
   name: string;
   type: DataType;

@@ -4,6 +4,7 @@ export type Keyword =
   | 'BRANCHES'
   | 'ITERATE'
   | 'RETURN'
+  | 'STRING_TYPE'
   | 'NUMBER_TYPE';
 
 export type Operator =

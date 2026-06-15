@@ -1,5 +1,5 @@
 import * as ast from '../parser/ast';
-import { DataType, SymbolInfo, Scope } from './types';
+import { DataType, SymbolInfo, Scope, FunctionSignature } from './types';
 import { VariableCollector } from './collector';
 
 export class SemanticAnalyzer {
@@ -15,6 +15,8 @@ export class SemanticAnalyzer {
   private globalVariables: Map<string, DataType> = new Map();
   private lambdaBodies: Map<string, string> = new Map(); // código C gerado para lambdas
   private tempCounter: number = 0;
+  private lambdaFunctionsCode: string[] = [];
+  private functionVariables: Map<string, FunctionSignature> = new Map();
 
   constructor() {
     this.globalScope = new Scope();
@@ -57,8 +59,8 @@ export class SemanticAnalyzer {
     const collector = new VariableCollector();
     collector.collect(program);
     this.globalVariables = collector.getVariables();
-    console.log(this.globalVariables);
     this.collectedLambdas = collector.getLambdas();
+    this.functionVariables = collector.getFunctionVariables();
 
     // Gerar código para lambdas primeiro
     this.generateLambdaFunctions();
@@ -84,6 +86,13 @@ export class SemanticAnalyzer {
     this.emitRaw('#include <stdlib.h>');
     this.emitRaw('#include <string.h>');
     this.emitRaw('');
+
+    // Inserir as definições das funções lambda aqui (antes do main)
+    for (const lambdaCode of this.lambdaFunctionsCode) {
+      this.emitRaw(lambdaCode);
+      this.emitRaw('');
+    }
+
     this.emitRaw('int main() {');
     this.indentLevel++;
   }
@@ -104,6 +113,14 @@ export class SemanticAnalyzer {
       }
     }
 
+    console.log('functionVariables', this.functionVariables);
+    for (const [name, sig] of this.functionVariables) {
+      const returnTypeC = this.dataTypeToCType(sig.returnType);
+      const paramTypesC = sig.paramTypes.map(t => this.dataTypeToCType(t)).join(', ');
+      const pointer = `${returnTypeC} (*${name})(${paramTypesC})`;
+      this.emit(`${pointer};\n`);
+    }
+
     if (numberVars.length > 0) {
       this.emit(`${numberVars.join(', ')};`);
     }
@@ -118,22 +135,20 @@ export class SemanticAnalyzer {
   private generateLambdaFunctions(): void {
     for (const [name, lambda] of this.collectedLambdas) {
       const lambdaCode = this.generateLambdaFunction(name, lambda);
-      this.lambdaBodies.set(name, lambdaCode);
+      this.lambdaFunctionsCode.push(lambdaCode);
     }
   }
 
   private generateLambdaFunction(name: string, lambda: ast.LambdaExpression): string {
     const lines: string[] = [];
-    const returnType = this.typeAnnotationToCType(lambda.returnType);
-    
-    // Constrói lista de parâmetros para C
+    const returnTypeC = this.typeAnnotationToCType(lambda.returnType);
     const params: string[] = [];
     for (const param of lambda.parameters) {
-      const paramType = this.typeAnnotationToCType(param.typeAnnotation);
-      params.push(`${paramType} ${param.name}`);
+      const paramTypeC = this.typeAnnotationToCType(param.typeAnnotation);
+      params.push(`${paramTypeC} ${param.name}`);
     }
-    
-    lines.push(`${returnType} ${name}(${params.join(', ')}) {`);
+    lines.push(`${returnTypeC} ${name}(${params.join(', ')}) {`);
+    this.indentLevel++;
     
     // Escopo da lambda
     const previousScope = this.currentScope;
@@ -146,30 +161,45 @@ export class SemanticAnalyzer {
     this.currentFunctionName = name;
     this.hasReturn = false;
     
-    // Declara parâmetros no escopo
+    // Declarar parâmetros no escopo
     for (const param of lambda.parameters) {
       const paramType = this.typeAnnotationToDataType(param.typeAnnotation);
       this.currentScope.declare(param.name, { name: param.name, type: paramType });
     }
     
-    // Coleta variáveis implícitas da lambda
-    const localVars = this.collectLocalVariables(lambda.body);
+    // Coletar variáveis locais da lambda (usar um collector separado ou reutilizar)
+    const paramNames = new Set(lambda.parameters.map(p => p.name));
+    const localVars = this.collectLocalVariables(lambda.body, paramNames);
     if (localVars.size > 0) {
-      lines.push(`    int ${Array.from(localVars).join(', ')};`);
+      const numberVars: string[] = [];
+      const stringVars: string[] = [];
+      for (const v of localVars) {
+        // precisamos saber o tipo; simplificando: assumimos number para variáveis não declaradas explicitamente
+        // Para simplificar, declaramos todas como int (para números) ou char[] (se detectar string)
+        // Vamos apenas declarar como int; strings serão tratadas por atribuições com strcpy.
+        numberVars.push(`int ${v}`);
+      }
+      if (numberVars.length) lines.push(this.indent() + numberVars.join(', ') + ';');
+      if (stringVars.length) lines.push(this.indent() + stringVars.join(', ') + ';');
       lines.push('');
     }
     
-    // Gera código do corpo
+    // Gerar o corpo
     const bodyCode = this.generateBlockCode(lambda.body);
     lines.push(bodyCode);
     
-    // Verifica retorno
-    if (!this.hasReturn && this.currentFunctionReturnType === 'number') {
-      lines.push('    return 0;');
+    // Verificar retorno
+    if (!this.hasReturn && this.currentFunctionReturnType !== 'number') {
+      // Para funções que não retornam valor? Na nossa linguagem, toda função deve retornar.
+      if (this.currentFunctionReturnType === 'string') {
+        lines.push(this.indent() + `return "";`);
+      } else {
+        lines.push(this.indent() + `return 0;`);
+      }
     }
     
+    this.indentLevel--;
     lines.push('}');
-    lines.push('');
     
     this.currentScope = previousScope;
     this.currentFunctionReturnType = previousReturnType;
@@ -179,15 +209,13 @@ export class SemanticAnalyzer {
     return lines.join('\n');
   }
 
-  private collectLocalVariables(block: ast.Block): Map<string, DataType> {
+  private collectLocalVariables(block: ast.Block, paramNames: Set<string> = new Set()): Set<string> {
     const collector = new VariableCollector();
-    // Criamos um programa fictício com o bloco
-    const fakeProgram: ast.Program = {
-      type: 'Program',
-      declarations: block.declarations
-    };
+    // Configurar o collector para ignorar os nomes dos parâmetros
+    collector.setIgnoredNames(paramNames);
+    const fakeProgram: ast.Program = { type: 'Program', declarations: block.declarations };
     collector.collect(fakeProgram);
-    return collector.getVariables();
+    return new Set(collector.getVariables().keys()); // agora retorna apenas variáveis locais, não parâmetros
   }
 
   private generateBlockCode(block: ast.Block, isTopLevel: boolean = false): string {
@@ -237,11 +265,23 @@ export class SemanticAnalyzer {
     // Verifica se a variável existe
     let varInfo = this.currentScope.lookup(stmt.identifier);
     if (!varInfo) {
-      // Declara implicitamente com o tipo da expressão
-      this.currentScope.declare(stmt.identifier, {
-        name: stmt.identifier,
-        type: exprType  // 'number' ou 'string'
-      });
+      if (stmt.value.type === 'LambdaExpression') {
+        // É uma função
+        const lambda = stmt.value as ast.LambdaExpression;
+        const paramTypes = lambda.parameters.map(p => this.typeAnnotationToDataType(p.typeAnnotation));
+        const returnType = this.typeAnnotationToDataType(lambda.returnType);
+        this.currentScope.declare(stmt.identifier, {
+          name: stmt.identifier,
+          type: 'function',
+          functionType: { paramTypes, returnType, paramNames: lambda.parameters.map(p => p.name) }
+        });
+      } else {
+        // Declara implicitamente com o tipo da expressão
+        this.currentScope.declare(stmt.identifier, {
+          name: stmt.identifier,
+          type: exprType  // 'number' ou 'string'
+        });
+      }
     } else {
       // Verifica compatibilidade de tipo (não permitir reatribuir string com number ou vice-versa)
       if (varInfo.type !== exprType) {
@@ -444,6 +484,9 @@ export class SemanticAnalyzer {
   private visitFunctionCall(expr: ast.FunctionCall): DataType {
     // Verifica se é uma lambda (função gerada)
     let funcInfo = this.currentScope.lookup(expr.callee.name);
+    if (!funcInfo || funcInfo.type !== 'function') {
+      throw new Error(`'${expr.callee.name}' não é uma função.`);
+    }
     let isLambda = false;
     
     if (!funcInfo && this.collectedLambdas.has(expr.callee.name)) {
@@ -561,13 +604,21 @@ export class SemanticAnalyzer {
 
   private typeAnnotationToDataType(ann: ast.TypeAnnotation): DataType {
     if (ann.kind === 'number') return 'number';
+    if (ann.kind === 'string') return 'string';
     if (ann.kind === 'function') return 'function';
     throw new Error(`Tipo desconhecido: ${Object.hasOwn(ann, 'kind') ? (ann as any).kind : ann}`);
   }
 
   private typeAnnotationToCType(ann: ast.TypeAnnotation): string {
     if (ann.kind === 'number') return 'int';
+    if (ann.kind === 'string') return 'char*';
     if (ann.kind === 'function') return 'int (*)()';
     throw new Error(`Tipo C desconhecido: ${Object.hasOwn(ann, 'kind') ? (ann as any).kind : ann}`);
+  }
+
+  private dataTypeToCType(type: DataType): string {
+    if (type === 'number') return 'int';
+    if (type === 'string') return 'char*';
+    return 'void*';
   }
 }

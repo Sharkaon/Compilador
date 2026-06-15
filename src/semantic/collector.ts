@@ -1,11 +1,16 @@
 import * as ast from '../parser/ast';
-import { DataType } from './types';
-
+import { DataType, FunctionSignature } from './types';
 
 export class VariableCollector {
   private variables: Map<string, DataType> = new Map();
   private lambdas: Map<string, ast.LambdaExpression> = new Map();
+  private functionVariables: Map<string, FunctionSignature> = new Map();
   private lambdaId: number = 0;
+  private ignoredNames: Set<string> = new Set();  
+
+  setIgnoredNames(names: Set<string>): void {
+    this.ignoredNames = names;
+  }
 
   collect(program: ast.Program): void {
     for (const decl of program.declarations) {
@@ -16,9 +21,23 @@ export class VariableCollector {
   private visitDeclaration(decl: ast.Declaration): void {
     switch (decl.type) {
       case 'AssignmentStmt':
-        const inferredType = this.inferExpressionType(decl.value);
-        this.recordVariable(decl.identifier, inferredType);
-        this.visitExpression(decl.value);
+        if (decl.value.type !== 'LambdaExpression') {
+          const inferredType = this.inferExpressionType(decl.value);
+          this.recordVariable(decl.identifier, inferredType);
+          this.visitExpression(decl.value);
+          break;
+        }
+
+        // É uma atribuição de lambda -> variável função
+        const lambda = decl.value as ast.LambdaExpression;
+        const signature: FunctionSignature = {
+          paramTypes: lambda.parameters.map(p => this.typeAnnotationToDataType(p.typeAnnotation)),
+          returnType: this.typeAnnotationToDataType(lambda.returnType)
+        };
+        this.functionVariables.set(decl.identifier, signature);
+        // Registra a lambda para geração posterior
+        const lambdaName = `__lambda_${this.lambdaId++}`;
+        this.lambdas.set(lambdaName, lambda);
         break;
       case 'ExprStmt':
         this.visitExpression(decl.expression);
@@ -124,6 +143,7 @@ export class VariableCollector {
   }
 
   private recordVariable(name: string, type: DataType, skipIfExiting = false): void {
+    if (this.ignoredNames.has(name)) return;
     const existing = this.variables.get(name);
     if (existing && skipIfExiting) return;
 
@@ -143,5 +163,16 @@ export class VariableCollector {
 
   getLambdas(): Map<string, ast.LambdaExpression> {
     return this.lambdas;
+  }
+
+  getFunctionVariables(): Map<string, FunctionSignature> {
+    return this.functionVariables;
+  }
+
+  private typeAnnotationToDataType(ann: ast.TypeAnnotation): DataType {
+    if (ann.kind === 'number') return 'number';
+    if (ann.kind === 'string') return 'string';
+    if (ann.kind === 'function') return 'function';
+    return 'number';
   }
 }

@@ -142,6 +142,7 @@ export interface Parameter {
 
 export type TypeAnnotation = 
   | { kind: 'number' }
+  | { kind: 'string' }
   | { kind: 'function'; paramTypes: TypeAnnotation[]; returnType: TypeAnnotation };
 
 // Iterate: 'iterate' '(' expressão ')' bloco

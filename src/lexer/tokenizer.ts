@@ -7,6 +7,7 @@ export class Tokenizer {
       case 'iterate':   return 'ITERATE';
       case 'return':    return 'RETURN';
       case 'number':    return 'NUMBER_TYPE';
+      case 'string':    return 'STRING_TYPE';
     }
     if (Tokenizer.isNumberLexeme(lexeme)) return 'NUMBER';
     if (Tokenizer.isStringLexeme(lexeme)) return 'STRING';
