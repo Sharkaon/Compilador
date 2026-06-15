@@ -7,7 +7,14 @@ export type Declaration =
   | AssignmentStmt
   | ExprStmt
   | BranchesStmt
+  | IterateStmt
   | ReturnStmt;
+
+export interface IterateStmt {
+  type: 'IterateStmt';
+  expression: Expression;
+  body: Block;
+}
 
 // atribuição = IDENT '=' expressão
 export interface AssignmentStmt {
@@ -96,8 +103,7 @@ export type PrimaryExpression =
   | Identifier
   | ParenthesizedExpression
   | FunctionCall
-  | LambdaExpression
-  | IterateExpression;
+  | LambdaExpression;
 
 export interface NumberLiteral {
   type: 'NumberLiteral';
@@ -145,13 +151,6 @@ export type TypeAnnotation =
   | { kind: 'string' }
   | { kind: 'function'; paramTypes: TypeAnnotation[]; returnType: TypeAnnotation };
 
-// Iterate: 'iterate' '(' expressão ')' bloco
-export interface IterateExpression {
-  type: 'IterateExpression';
-  expression: Expression; // controla a repetição (ex.: número de vezes, coleção)
-  body: Block;
-}
-
 export type Node =
   | Declaration
   | AssignmentStmt
@@ -174,5 +173,4 @@ export type Node =
   | FunctionCall
   | LambdaExpression
   | Parameter
-  | TypeAnnotation
-  | IterateExpression;
+  | TypeAnnotation;

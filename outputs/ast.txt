@@ -3,64 +3,41 @@
   "declarations": [
     {
       "type": "AssignmentStmt",
-      "identifier": "soma",
+      "identifier": "resultado",
       "value": {
-        "type": "NumberLiteral",
-        "value": 0
-      }
-    },
-    {
-      "type": "AssignmentStmt",
-      "identifier": "iteracao",
-      "value": {
-        "type": "NumberLiteral",
-        "value": 0
-      }
-    },
-    {
-      "type": "ExprStmt",
-      "expression": {
-        "type": "IterateExpression",
-        "expression": {
-          "type": "NumberLiteral",
-          "value": 5
-        },
-        "body": {
-          "type": "Block",
-          "declarations": [
-            {
-              "type": "AssignmentStmt",
-              "identifier": "iteracao",
-              "value": {
-                "type": "AdditiveExpression",
-                "left": {
-                  "type": "Identifier",
-                  "name": "iteracao"
-                },
-                "operator": "+",
-                "right": {
-                  "type": "NumberLiteral",
-                  "value": 1
-                }
-              }
+        "type": "AdditiveExpression",
+        "left": {
+          "type": "AdditiveExpression",
+          "left": {
+            "type": "NumberLiteral",
+            "value": 10
+          },
+          "operator": "+",
+          "right": {
+            "type": "MultiplicativeExpression",
+            "left": {
+              "type": "NumberLiteral",
+              "value": 5
             },
-            {
-              "type": "AssignmentStmt",
-              "identifier": "soma",
-              "value": {
-                "type": "AdditiveExpression",
-                "left": {
-                  "type": "Identifier",
-                  "name": "soma"
-                },
-                "operator": "+",
-                "right": {
-                  "type": "Identifier",
-                  "name": "iteracao"
-                }
-              }
+            "operator": "*",
+            "right": {
+              "type": "NumberLiteral",
+              "value": 2
             }
-          ]
+          }
+        },
+        "operator": "-",
+        "right": {
+          "type": "MultiplicativeExpression",
+          "left": {
+            "type": "NumberLiteral",
+            "value": 8
+          },
+          "operator": "/",
+          "right": {
+            "type": "NumberLiteral",
+            "value": 4
+          }
         }
       }
     },
@@ -75,7 +52,39 @@
         "arguments": [
           {
             "type": "Identifier",
-            "name": "soma"
+            "name": "resultado"
+          }
+        ]
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "texto",
+      "value": {
+        "type": "AdditiveExpression",
+        "left": {
+          "type": "StringLiteral",
+          "value": "Valor: "
+        },
+        "operator": "+",
+        "right": {
+          "type": "Identifier",
+          "name": "resultado"
+        }
+      }
+    },
+    {
+      "type": "ExprStmt",
+      "expression": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "escrever"
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "texto"
           }
         ]
       }

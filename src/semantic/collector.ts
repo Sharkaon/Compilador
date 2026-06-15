@@ -48,6 +48,10 @@ export class VariableCollector {
           this.visitBlock(branch.block);
         }
         break;
+      case 'IterateStmt':
+        this.visitExpression(decl.expression);
+        this.visitBlock(decl.body);
+        break;
       case 'ReturnStmt':
         if (decl.value) this.visitExpression(decl.value);
         break;
@@ -99,10 +103,6 @@ export class VariableCollector {
         const lambdaName = `__lambda_${this.lambdaId++}`;
         this.lambdas.set(lambdaName, expr);
         // Não coletamos variáveis do corpo agora, faremos depois
-        break;
-      case 'IterateExpression':
-        this.visitExpression(expr.expression);
-        this.visitBlock(expr.body);
         break;
     }
   }

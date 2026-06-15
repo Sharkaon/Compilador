@@ -1,7 +1,7 @@
 [
   {
     "type": "IDENT",
-    "lexeme": "soma",
+    "lexeme": "resultado",
     "line": 1,
     "column": 1
   },
@@ -9,192 +9,168 @@
     "type": "ASSIGN",
     "lexeme": "=",
     "line": 1,
-    "column": 6
+    "column": 11
   },
   {
     "type": "NUMBER",
-    "lexeme": "0",
+    "lexeme": "10",
     "line": 1,
-    "column": 8
-  },
-  {
-    "type": "SEMICOLON",
-    "lexeme": ";",
-    "line": 1,
-    "column": 9
-  },
-  {
-    "type": "IDENT",
-    "lexeme": "iteracao",
-    "line": 2,
-    "column": 1
-  },
-  {
-    "type": "ASSIGN",
-    "lexeme": "=",
-    "line": 2,
-    "column": 10
-  },
-  {
-    "type": "NUMBER",
-    "lexeme": "0",
-    "line": 2,
-    "column": 12
-  },
-  {
-    "type": "SEMICOLON",
-    "lexeme": ";",
-    "line": 2,
     "column": 13
   },
   {
-    "type": "ITERATE",
-    "lexeme": "iterate",
-    "line": 4,
+    "type": "PLUS",
+    "lexeme": "+",
+    "line": 1,
+    "column": 16
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "5",
+    "line": 1,
+    "column": 18
+  },
+  {
+    "type": "TIMES",
+    "lexeme": "*",
+    "line": 1,
+    "column": 20
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "2",
+    "line": 1,
+    "column": 22
+  },
+  {
+    "type": "MINUS",
+    "lexeme": "-",
+    "line": 1,
+    "column": 24
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "8",
+    "line": 1,
+    "column": 26
+  },
+  {
+    "type": "DIVISION",
+    "lexeme": "/",
+    "line": 1,
+    "column": 28
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "4",
+    "line": 1,
+    "column": 30
+  },
+  {
+    "type": "SEMICOLON",
+    "lexeme": ";",
+    "line": 1,
+    "column": 31
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "escrever",
+    "line": 2,
     "column": 1
   },
   {
     "type": "LPAREN",
     "lexeme": "(",
-    "line": 4,
+    "line": 2,
     "column": 9
   },
   {
-    "type": "NUMBER",
-    "lexeme": "5",
-    "line": 4,
+    "type": "IDENT",
+    "lexeme": "resultado",
+    "line": 2,
     "column": 10
   },
   {
     "type": "RPAREN",
     "lexeme": ")",
-    "line": 4,
-    "column": 11
-  },
-  {
-    "type": "LBRACE",
-    "lexeme": "{",
-    "line": 4,
-    "column": 13
-  },
-  {
-    "type": "IDENT",
-    "lexeme": "iteracao",
-    "line": 5,
-    "column": 5
-  },
-  {
-    "type": "ASSIGN",
-    "lexeme": "=",
-    "line": 5,
-    "column": 14
-  },
-  {
-    "type": "IDENT",
-    "lexeme": "iteracao",
-    "line": 5,
-    "column": 16
-  },
-  {
-    "type": "PLUS",
-    "lexeme": "+",
-    "line": 5,
-    "column": 25
-  },
-  {
-    "type": "NUMBER",
-    "lexeme": "1",
-    "line": 5,
-    "column": 27
-  },
-  {
-    "type": "SEMICOLON",
-    "lexeme": ";",
-    "line": 5,
-    "column": 28
-  },
-  {
-    "type": "IDENT",
-    "lexeme": "soma",
-    "line": 6,
-    "column": 5
-  },
-  {
-    "type": "ASSIGN",
-    "lexeme": "=",
-    "line": 6,
-    "column": 10
-  },
-  {
-    "type": "IDENT",
-    "lexeme": "soma",
-    "line": 6,
-    "column": 12
-  },
-  {
-    "type": "PLUS",
-    "lexeme": "+",
-    "line": 6,
-    "column": 17
-  },
-  {
-    "type": "IDENT",
-    "lexeme": "iteracao",
-    "line": 6,
+    "line": 2,
     "column": 19
   },
   {
     "type": "SEMICOLON",
     "lexeme": ";",
-    "line": 6,
-    "column": 27
+    "line": 2,
+    "column": 20
   },
   {
-    "type": "RBRACE",
-    "lexeme": "}",
-    "line": 7,
+    "type": "IDENT",
+    "lexeme": "texto",
+    "line": 4,
     "column": 1
+  },
+  {
+    "type": "ASSIGN",
+    "lexeme": "=",
+    "line": 4,
+    "column": 7
+  },
+  {
+    "type": "STRING",
+    "lexeme": "\"Valor: \"",
+    "line": 4,
+    "column": 9
+  },
+  {
+    "type": "PLUS",
+    "lexeme": "+",
+    "line": 4,
+    "column": 19
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "resultado",
+    "line": 4,
+    "column": 21
   },
   {
     "type": "SEMICOLON",
     "lexeme": ";",
-    "line": 7,
-    "column": 2
+    "line": 4,
+    "column": 30
   },
   {
     "type": "IDENT",
     "lexeme": "escrever",
-    "line": 9,
+    "line": 5,
     "column": 1
   },
   {
     "type": "LPAREN",
     "lexeme": "(",
-    "line": 9,
+    "line": 5,
     "column": 9
   },
   {
     "type": "IDENT",
-    "lexeme": "soma",
-    "line": 9,
+    "lexeme": "texto",
+    "line": 5,
     "column": 10
   },
   {
     "type": "RPAREN",
     "lexeme": ")",
-    "line": 9,
-    "column": 14
+    "line": 5,
+    "column": 15
   },
   {
     "type": "SEMICOLON",
     "lexeme": ";",
-    "line": 9,
-    "column": 15
+    "line": 5,
+    "column": 16
   },
   {
     "type": "EOF",
     "lexeme": "",
-    "line": 9,
-    "column": 16
+    "line": 5,
+    "column": 17
   }
 ]

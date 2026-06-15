@@ -67,12 +67,23 @@ export class Parser {
     if (this.consumeIfIs('RETURN')) {
       return this.parseReturnStmt();
     }
+    if (this.consumeIfIs('ITERATE')) {
+      return this.parseIterateStmt();
+    }
     if (this.check('IDENT') && this.peekNext()?.type === 'ASSIGN') {
       return this.parseAssignmentStmt();
     }
     const expr = this.parseExpression();
     this.consume('SEMICOLON', "Expected ';' after expression");
     return { type: 'ExprStmt', expression: expr };
+  }
+
+  private parseIterateStmt(): ast.IterateStmt {
+    this.consume('LPAREN', "Expected '(' after 'iterate'");
+    const expr = this.parseExpression();
+    this.consume('RPAREN', "Expected ')' after iterate expression");
+    const body = this.parseBlock();
+    return { type: 'IterateStmt', expression: expr, body };
   }
 
   private parseAssignmentStmt(): ast.AssignmentStmt {
@@ -209,9 +220,6 @@ export class Parser {
       this.consume('RPAREN', "Expected ')' after parenthesized expression");
       return { type: 'ParenthesizedExpression', expression: expr };
     }
-    if (this.consumeIfIs('ITERATE')) {
-      return this.parseIterateExpression();
-    }
     throw new Error(`Unexpected token ${this.peek().type} at line ${this.peek().line}`);
   }
 
@@ -293,13 +301,5 @@ export class Parser {
       return { kind: 'function', paramTypes, returnType };
     }
     throw new Error(`Expected type annotation, found ${this.peek().type}`);
-  }
-
-  private parseIterateExpression(): ast.IterateExpression {
-    this.consume('LPAREN', "Expected '(' after 'iterate'");
-    const expr = this.parseExpression();
-    this.consume('RPAREN', "Expected ')' after iterate expression");
-    const body = this.parseBlock();
-    return { type: 'IterateExpression', expression: expr, body };
   }
 }

@@ -17,6 +17,7 @@ export class SemanticAnalyzer {
   private tempCounter: number = 0;
   private lambdaFunctionsCode: string[] = [];
   private functionVariables: Map<string, FunctionSignature> = new Map();
+  private loopCounter: number = 0;
 
   constructor() {
     this.globalScope = new Scope();
@@ -107,9 +108,9 @@ export class SemanticAnalyzer {
     const stringVars: string[] = [];
     for (const [varName, type] of this.globalVariables) {
       if (type === 'string') {
-        stringVars.push(`char ${varName}[256]`);
+        stringVars.push(`${varName}[256]`);
       } else if (type === 'number') {
-        numberVars.push(`int ${varName}`);
+        numberVars.push(varName);
       }
     }
 
@@ -122,10 +123,10 @@ export class SemanticAnalyzer {
     }
 
     if (numberVars.length > 0) {
-      this.emit(`${numberVars.join(', ')};`);
+      this.emit(`int ${numberVars.join(', ')};`);
     }
     if (stringVars.length > 0) {
-      this.emit(`${stringVars.join(', ')};`);
+      this.emit(`char* ${stringVars.join(', ')};`);
     }
     if (numberVars.length > 0 || stringVars.length > 0) {
       this.emit('');
@@ -252,6 +253,9 @@ export class SemanticAnalyzer {
       case 'BranchesStmt':
         this.visitBranchesStmt(decl);
         break;
+      case 'IterateStmt':
+        this.visitIterateStmt(decl);
+        break;
       case 'ReturnStmt':
         this.visitReturnStmt(decl);
         break;
@@ -375,6 +379,21 @@ export class SemanticAnalyzer {
     }
   }
 
+  private visitIterateStmt(stmt: ast.IterateStmt): void {
+    const controlType = this.visitExpression(stmt.expression);
+    if (controlType !== 'number') {
+      throw new Error(`Iterate espera expressão numérica para o número de repetições.`);
+    }
+    // Geração de código C: for (int _i = 0; _i < N; _i++) { ... }
+    const controlCode = this.expressionToC(stmt.expression);
+    const loopVar = `_i${this.loopCounter++}`;
+    this.emit(`for (int ${loopVar} = 0; ${loopVar} < ${controlCode}; ${loopVar}++) {`);
+    this.indentLevel++;
+    this.visitBlock(stmt.body);
+    this.indentLevel--;
+    this.emit(`}`);
+  }
+
   private visitReturnStmt(stmt: ast.ReturnStmt): void {
     if (this.currentFunctionReturnType === null && this.currentFunctionName === null) {
       throw new Error(`'return' fora de função/lambda.`);
@@ -430,8 +449,6 @@ export class SemanticAnalyzer {
         return this.visitFunctionCall(expr);
       case 'LambdaExpression':
         return 'function';
-      case 'IterateExpression':
-        return this.visitIterateExpression(expr);
       default:
         throw new Error(`Expressão desconhecida: ${(expr as any).type}`);
     }
@@ -522,21 +539,6 @@ export class SemanticAnalyzer {
     return funcInfo.functionType!.returnType;
   }
 
-  private visitIterateExpression(expr: ast.IterateExpression): DataType {
-    const controlType = this.visitExpression(expr.expression);
-    if (controlType !== 'number') {
-      throw new Error(`Iterate espera expressão numérica para o número de repetições.`);
-    }
-    
-    // Visita o bloco (cria novo escopo)
-    const previousScope = this.currentScope;
-    this.currentScope = new Scope(previousScope);
-    this.visitBlock(expr.body);
-    this.currentScope = previousScope;
-    
-    return 'number';
-  }
-
   private expressionToC(expr: ast.Expression): string {
     switch (expr.type) {
       case 'NumberLiteral':
@@ -572,9 +574,6 @@ export class SemanticAnalyzer {
         const lambdaName = `__lambda_${this.lambdaCounter++}`;
         this.collectedLambdas.set(lambdaName, expr);
         return lambdaName;
-      case 'IterateExpression':
-        // Iterate como expressão não é suportada
-        throw new Error('Iterate não deve aparecer como expressão.');
       default:
         throw new Error(`Tipo de expressão não suportada na geração C: ${(expr as any).type}`);
     }
