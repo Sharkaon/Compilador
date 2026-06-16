@@ -275,7 +275,6 @@ export class Parser {
     }
     this.consume('RPAREN', "Expected ')' after parameters");
     this.consume('ARROW', "Expected '->' in lambda");
-    console.log(this.tokens);
     const returnType = this.parseTypeAnnotation();
     const body = this.parseBlock();
     return { type: 'LambdaExpression', parameters, returnType, body };

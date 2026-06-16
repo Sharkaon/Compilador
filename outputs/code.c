@@ -2,23 +2,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-int __lambda_0(int (*f)(int), int x) {
-    return f(x);
-}
-
-int __lambda_1(int n) {
-    return n * 2;
+int __lambda_0(int n) {
+    if (n <= 1) {
+        return 1;
+    }
+    else {
+        return n * __lambda_0(n - 1);
+    }
 }
 
 int main() {
-    int (*aplica)(int (*)(int), int);
+    int (*factorial)(int);
 
-    int (*dobro)(int);
-
-    int resultado;
-    
-    aplica = __lambda_0;
-    dobro = __lambda_1;
-    resultado = aplica(dobro, 21);
-    printf("%d\n", resultado);
+    factorial = __lambda_0;
+    factorial = __lambda_0;
+    printf("%d\n", factorial(11));
 }

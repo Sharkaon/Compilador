@@ -10,6 +10,7 @@ export class SemanticAnalyzer {
   private currentFunctionReturnType: DataType | null = null;
   private hasReturn: boolean = false;
   private currentFunctionName: string | null = null;
+  private originalFunctionName: string | null = null;
   private lambdaCounter: number = 0;
   private collectedLambdas: Map<string, ast.LambdaExpression> = new Map();
   private globalVariables: Map<string, DataType> = new Map();
@@ -64,7 +65,8 @@ export class SemanticAnalyzer {
     this.functionVariables = collector.getFunctionVariables();
 
     // Gerar código para lambdas primeiro
-    this.generateLambdaFunctions();
+    const lambdaOriginalNames = collector.getLambdaOriginalNames();
+    this.generateLambdaFunctions(lambdaOriginalNames);
 
     // Segunda passagem: gerar código principal
     this.generateStartingCode();
@@ -114,7 +116,6 @@ export class SemanticAnalyzer {
       }
     }
 
-    console.log('functionVariables', this.functionVariables);
     for (const [name, sig] of this.functionVariables) {
       const returnTypeC = this.dataTypeToCType(sig.returnType);
       const paramTypesC = sig.paramTypes.map(t => this.typeAnnotationToCType(t)).join(', ');
@@ -133,14 +134,15 @@ export class SemanticAnalyzer {
     }
   }
 
-  private generateLambdaFunctions(): void {
+  private generateLambdaFunctions(lambdaOriginalNames: Map<string, string>): void {
     for (const [name, lambda] of this.collectedLambdas) {
-      const lambdaCode = this.generateLambdaFunction(name, lambda);
+      const originalName = lambdaOriginalNames.get(name);
+      const lambdaCode = this.generateLambdaFunction(name, lambda, originalName);
       this.lambdaFunctionsCode.push(lambdaCode);
     }
   }
 
-  private generateLambdaFunction(name: string, lambda: ast.LambdaExpression): string {
+  private generateLambdaFunction(name: string, lambda: ast.LambdaExpression, originalName: string | null = null): string {
     const lines: string[] = [];
     const returnTypeC = this.typeAnnotationToCType(lambda.returnType);
     const params: string[] = [];
@@ -167,6 +169,7 @@ export class SemanticAnalyzer {
     this.currentScope = new Scope(previousScope);
     this.currentFunctionReturnType = this.typeAnnotationToDataType(lambda.returnType);
     this.currentFunctionName = name;
+    this.originalFunctionName = originalName;
     this.hasReturn = false;
     
     // Declarar parâmetros no escopo
@@ -181,6 +184,16 @@ export class SemanticAnalyzer {
       const returnType = this.typeAnnotationToDataType(param.typeAnnotation.returnType);
       this.currentScope.declare(param.name, {
         name: param.name,
+        type: 'function',
+        functionType: { paramTypes, returnType }
+      });
+    }
+
+    if (originalName) {
+      const paramTypes = lambda.parameters.map(p => this.typeAnnotationToDataType(p.typeAnnotation));
+      const returnType = this.typeAnnotationToDataType(lambda.returnType);
+      this.currentScope.declare(originalName, {
+        name: originalName,
         type: 'function',
         functionType: { paramTypes, returnType }
       });
@@ -286,17 +299,34 @@ export class SemanticAnalyzer {
     
     // Verifica se a variável existe
     let varInfo = this.currentScope.lookup(stmt.identifier);
+    console.log(varInfo);
     if (!varInfo) {
       if (stmt.value.type === 'LambdaExpression') {
         // É uma função
         const lambda = stmt.value as ast.LambdaExpression;
         const paramTypes = lambda.parameters.map(p => this.typeAnnotationToDataType(p.typeAnnotation));
         const returnType = this.typeAnnotationToDataType(lambda.returnType);
+        console.log('LAMBDAA');
         this.currentScope.declare(stmt.identifier, {
           name: stmt.identifier,
           type: 'function',
           functionType: { paramTypes, returnType, paramNames: lambda.parameters.map(p => p.name) }
         });
+
+        let lambdaName: string | undefined;
+        for (const [name, l] of this.collectedLambdas) {
+          if (l === lambda) {
+            lambdaName = name;
+            break;
+          }
+        }
+        if (!lambdaName) {
+          // Fallback: gera um novo nome (não deveria acontecer)
+          lambdaName = `__lambda_${this.lambdaCounter++}`;
+          this.collectedLambdas.set(lambdaName, lambda);
+        }
+        // Emite a atribuição do ponteiro para função no código C
+        this.emit(`${stmt.identifier} = ${lambdaName};`);
       } else {
         // Declara implicitamente com o tipo da expressão
         this.currentScope.declare(stmt.identifier, {
@@ -519,7 +549,7 @@ export class SemanticAnalyzer {
   private visitFunctionCall(expr: ast.FunctionCall): DataType {
     // Verifica se é uma lambda (função gerada)
     let funcInfo = this.currentScope.lookup(expr.callee.name);
-    if (!funcInfo || funcInfo.type !== 'function') {
+    if (!funcInfo || (funcInfo.type !== 'function' && !funcInfo.functionType)) {
       throw new Error(`'${expr.callee.name}' não é uma função.`);
     }
     let isLambda = false;
@@ -585,8 +615,16 @@ export class SemanticAnalyzer {
       case 'MultiplicativeExpression':
         return `${this.expressionToC(expr.left)} ${expr.operator} ${this.expressionToC(expr.right)}`;
       case 'FunctionCall':
+        const calleeName = expr.callee.name;
+        // Se a função atual tem um nome original e o callee é esse nome, substitui pelo nome da lambda
+        if (this.currentFunctionName && this.originalFunctionName && calleeName === this.originalFunctionName) {
+          // Usa o próprio nome da função (__lambda_X)
+          const args = expr.arguments.map(arg => this.expressionToC(arg)).join(', ');
+          return `${this.currentFunctionName}(${args})`;
+        }
+        // Caso contrário, uso normal
         const args = expr.arguments.map(arg => this.expressionToC(arg)).join(', ');
-        return `${expr.callee.name}(${args})`;
+        return `${calleeName}(${args})`;
       case 'LambdaExpression':
         // Lambdas devem ter sido convertidas para funções C
         const lambdaName = `__lambda_${this.lambdaCounter++}`;

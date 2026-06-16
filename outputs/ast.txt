@@ -3,62 +3,7 @@
   "declarations": [
     {
       "type": "AssignmentStmt",
-      "identifier": "aplica",
-      "value": {
-        "type": "LambdaExpression",
-        "parameters": [
-          {
-            "type": "Parameter",
-            "name": "f",
-            "typeAnnotation": {
-              "kind": "function",
-              "paramTypes": [
-                {
-                  "kind": "number"
-                }
-              ],
-              "returnType": {
-                "kind": "number"
-              }
-            }
-          },
-          {
-            "type": "Parameter",
-            "name": "x",
-            "typeAnnotation": {
-              "kind": "number"
-            }
-          }
-        ],
-        "returnType": {
-          "kind": "number"
-        },
-        "body": {
-          "type": "Block",
-          "declarations": [
-            {
-              "type": "ReturnStmt",
-              "value": {
-                "type": "FunctionCall",
-                "callee": {
-                  "type": "Identifier",
-                  "name": "f"
-                },
-                "arguments": [
-                  {
-                    "type": "Identifier",
-                    "name": "x"
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "type": "AssignmentStmt",
-      "identifier": "dobro",
+      "identifier": "factorial",
       "value": {
         "type": "LambdaExpression",
         "parameters": [
@@ -77,43 +22,79 @@
           "type": "Block",
           "declarations": [
             {
-              "type": "ReturnStmt",
-              "value": {
-                "type": "MultiplicativeExpression",
-                "left": {
-                  "type": "Identifier",
-                  "name": "n"
+              "type": "BranchesStmt",
+              "branches": [
+                {
+                  "type": "Branch",
+                  "condition": {
+                    "type": "RelationalExpression",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "n"
+                    },
+                    "operator": "<=",
+                    "right": {
+                      "type": "NumberLiteral",
+                      "value": 1
+                    }
+                  },
+                  "block": {
+                    "type": "Block",
+                    "declarations": [
+                      {
+                        "type": "ReturnStmt",
+                        "value": {
+                          "type": "NumberLiteral",
+                          "value": 1
+                        }
+                      }
+                    ]
+                  }
                 },
-                "operator": "*",
-                "right": {
-                  "type": "NumberLiteral",
-                  "value": 2
+                {
+                  "type": "Branch",
+                  "block": {
+                    "type": "Block",
+                    "declarations": [
+                      {
+                        "type": "ReturnStmt",
+                        "value": {
+                          "type": "MultiplicativeExpression",
+                          "left": {
+                            "type": "Identifier",
+                            "name": "n"
+                          },
+                          "operator": "*",
+                          "right": {
+                            "type": "FunctionCall",
+                            "callee": {
+                              "type": "Identifier",
+                              "name": "factorial"
+                            },
+                            "arguments": [
+                              {
+                                "type": "AdditiveExpression",
+                                "left": {
+                                  "type": "Identifier",
+                                  "name": "n"
+                                },
+                                "operator": "-",
+                                "right": {
+                                  "type": "NumberLiteral",
+                                  "value": 1
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
                 }
-              }
+              ]
             }
           ]
         }
-      }
-    },
-    {
-      "type": "AssignmentStmt",
-      "identifier": "resultado",
-      "value": {
-        "type": "FunctionCall",
-        "callee": {
-          "type": "Identifier",
-          "name": "aplica"
-        },
-        "arguments": [
-          {
-            "type": "Identifier",
-            "name": "dobro"
-          },
-          {
-            "type": "NumberLiteral",
-            "value": 21
-          }
-        ]
       }
     },
     {
@@ -126,8 +107,17 @@
         },
         "arguments": [
           {
-            "type": "Identifier",
-            "name": "resultado"
+            "type": "FunctionCall",
+            "callee": {
+              "type": "Identifier",
+              "name": "factorial"
+            },
+            "arguments": [
+              {
+                "type": "NumberLiteral",
+                "value": 11
+              }
+            ]
           }
         ]
       }

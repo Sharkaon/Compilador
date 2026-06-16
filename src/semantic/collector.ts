@@ -7,6 +7,7 @@ export class VariableCollector {
   private functionVariables: Map<string, FunctionSignature> = new Map();
   private lambdaId: number = 0;
   private ignoredNames: Set<string> = new Set();  
+  private lambdaOriginalNames: Map<string, string> = new Map();
 
   setIgnoredNames(names: Set<string>): void {
     this.ignoredNames = names;
@@ -37,6 +38,7 @@ export class VariableCollector {
         // Registra a lambda para geração posterior
         const lambdaName = `__lambda_${this.lambdaId++}`;
         this.lambdas.set(lambdaName, lambda);
+        this.lambdaOriginalNames.set(lambdaName, decl.identifier);
         break;
       case 'ExprStmt':
         this.visitExpression(decl.expression);
@@ -167,6 +169,10 @@ export class VariableCollector {
 
   getFunctionVariables(): Map<string, FunctionSignature> {
     return this.functionVariables;
+  }
+
+  getLambdaOriginalNames(): Map<string, string> {
+    return this.lambdaOriginalNames;
   }
 
   private typeAnnotationToDataType(ann: ast.TypeAnnotation): DataType {
