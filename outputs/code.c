@@ -15,7 +15,7 @@ int main() {
 
     int (*dobro)(int);
 
-    int resultado, dobro;
+    int resultado;
     
     aplica = __lambda_0;
     dobro = __lambda_1;

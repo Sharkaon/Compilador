@@ -28,7 +28,6 @@ export class VariableCollector {
           break;
         }
 
-        // É uma atribuição de lambda -> variável função
         const lambda = decl.value as ast.LambdaExpression;
         const signature: FunctionSignature = {
           paramTypes: lambda.parameters.map(p => p.typeAnnotation),
@@ -144,6 +143,7 @@ export class VariableCollector {
 
   private recordVariable(name: string, type: DataType, skipIfExiting = false): void {
     if (this.ignoredNames.has(name)) return;
+    if (this.functionVariables.has(name)) return;
     const existing = this.variables.get(name);
     if (existing && skipIfExiting) return;
 
