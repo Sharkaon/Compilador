@@ -3,42 +3,117 @@
   "declarations": [
     {
       "type": "AssignmentStmt",
-      "identifier": "resultado",
+      "identifier": "aplica",
       "value": {
-        "type": "AdditiveExpression",
-        "left": {
-          "type": "AdditiveExpression",
-          "left": {
-            "type": "NumberLiteral",
-            "value": 10
+        "type": "LambdaExpression",
+        "parameters": [
+          {
+            "type": "Parameter",
+            "name": "f",
+            "typeAnnotation": {
+              "kind": "function",
+              "paramTypes": [
+                {
+                  "kind": "number"
+                }
+              ],
+              "returnType": {
+                "kind": "number"
+              }
+            }
           },
-          "operator": "+",
-          "right": {
-            "type": "MultiplicativeExpression",
-            "left": {
-              "type": "NumberLiteral",
-              "value": 5
-            },
-            "operator": "*",
-            "right": {
-              "type": "NumberLiteral",
-              "value": 2
+          {
+            "type": "Parameter",
+            "name": "x",
+            "typeAnnotation": {
+              "kind": "number"
             }
           }
+        ],
+        "returnType": {
+          "kind": "number"
         },
-        "operator": "-",
-        "right": {
-          "type": "MultiplicativeExpression",
-          "left": {
-            "type": "NumberLiteral",
-            "value": 8
-          },
-          "operator": "/",
-          "right": {
-            "type": "NumberLiteral",
-            "value": 4
-          }
+        "body": {
+          "type": "Block",
+          "declarations": [
+            {
+              "type": "ReturnStmt",
+              "value": {
+                "type": "FunctionCall",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "f"
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "x"
+                  }
+                ]
+              }
+            }
+          ]
         }
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "dobro",
+      "value": {
+        "type": "LambdaExpression",
+        "parameters": [
+          {
+            "type": "Parameter",
+            "name": "n",
+            "typeAnnotation": {
+              "kind": "number"
+            }
+          }
+        ],
+        "returnType": {
+          "kind": "number"
+        },
+        "body": {
+          "type": "Block",
+          "declarations": [
+            {
+              "type": "ReturnStmt",
+              "value": {
+                "type": "MultiplicativeExpression",
+                "left": {
+                  "type": "Identifier",
+                  "name": "n"
+                },
+                "operator": "*",
+                "right": {
+                  "type": "NumberLiteral",
+                  "value": 2
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "resultado",
+      "value": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "aplica"
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "dobro"
+          },
+          {
+            "type": "NumberLiteral",
+            "value": 21
+          }
+        ]
       }
     },
     {
@@ -53,38 +128,6 @@
           {
             "type": "Identifier",
             "name": "resultado"
-          }
-        ]
-      }
-    },
-    {
-      "type": "AssignmentStmt",
-      "identifier": "texto",
-      "value": {
-        "type": "AdditiveExpression",
-        "left": {
-          "type": "StringLiteral",
-          "value": "Valor: "
-        },
-        "operator": "+",
-        "right": {
-          "type": "Identifier",
-          "name": "resultado"
-        }
-      }
-    },
-    {
-      "type": "ExprStmt",
-      "expression": {
-        "type": "FunctionCall",
-        "callee": {
-          "type": "Identifier",
-          "name": "escrever"
-        },
-        "arguments": [
-          {
-            "type": "Identifier",
-            "name": "texto"
           }
         ]
       }

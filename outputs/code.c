@@ -2,14 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+int __lambda_0(int (*f)(int), int x) {
+    return f(x);
+}
+
+int __lambda_1(int n) {
+    return n * 2;
+}
+
 int main() {
-    int resultado;
-    char* texto[256];
+    int (*aplica)(int (*)(int), int);
+
+    int (*dobro)(int);
+
+    int resultado, dobro;
     
-    resultado = 10 + 5 * 2 - 8 / 4;
+    aplica = __lambda_0;
+    dobro = __lambda_1;
+    resultado = aplica(dobro, 21);
     printf("%d\n", resultado);
-    char __temp_0[512];
-    snprintf(__temp_0, 512, "%s%d", "Valor: ", resultado);
-    strcpy(texto, __temp_0);
-    printf("%s\n", texto);
 }

@@ -117,7 +117,7 @@ export class SemanticAnalyzer {
     console.log('functionVariables', this.functionVariables);
     for (const [name, sig] of this.functionVariables) {
       const returnTypeC = this.dataTypeToCType(sig.returnType);
-      const paramTypesC = sig.paramTypes.map(t => this.dataTypeToCType(t)).join(', ');
+      const paramTypesC = sig.paramTypes.map(t => this.typeAnnotationToCType(t)).join(', ');
       const pointer = `${returnTypeC} (*${name})(${paramTypesC})`;
       this.emit(`${pointer};\n`);
     }
@@ -145,8 +145,15 @@ export class SemanticAnalyzer {
     const returnTypeC = this.typeAnnotationToCType(lambda.returnType);
     const params: string[] = [];
     for (const param of lambda.parameters) {
-      const paramTypeC = this.typeAnnotationToCType(param.typeAnnotation);
-      params.push(`${paramTypeC} ${param.name}`);
+      if (param.typeAnnotation.kind !== 'function') {
+        const paramTypeC = this.typeAnnotationToCType(param.typeAnnotation);
+        params.push(`${paramTypeC} ${param.name}`);
+        continue;
+      }
+
+      const returnTypeC = this.typeAnnotationToCType(param.typeAnnotation.returnType);
+      const paramTypesC = param.typeAnnotation.paramTypes.map(t => this.typeAnnotationToCType(t)).join(', ');
+      params.push(`${returnTypeC} (*${param.name})(${paramTypesC})`);
     }
     lines.push(`${returnTypeC} ${name}(${params.join(', ')}) {`);
     this.indentLevel++;
@@ -164,8 +171,19 @@ export class SemanticAnalyzer {
     
     // Declarar parâmetros no escopo
     for (const param of lambda.parameters) {
-      const paramType = this.typeAnnotationToDataType(param.typeAnnotation);
-      this.currentScope.declare(param.name, { name: param.name, type: paramType });
+      if (param.typeAnnotation.kind !== 'function') {
+        const paramType = this.typeAnnotationToDataType(param.typeAnnotation);
+        this.currentScope.declare(param.name, { name: param.name, type: paramType });
+        continue;
+      }
+
+      const paramTypes = param.typeAnnotation.paramTypes.map(t => this.typeAnnotationToDataType(t));
+      const returnType = this.typeAnnotationToDataType(param.typeAnnotation.returnType);
+      this.currentScope.declare(param.name, {
+        name: param.name,
+        type: 'function',
+        functionType: { paramTypes, returnType }
+      });
     }
     
     // Coletar variáveis locais da lambda (usar um collector separado ou reutilizar)
@@ -611,8 +629,12 @@ export class SemanticAnalyzer {
   private typeAnnotationToCType(ann: ast.TypeAnnotation): string {
     if (ann.kind === 'number') return 'int';
     if (ann.kind === 'string') return 'char*';
-    if (ann.kind === 'function') return 'int (*)()';
-    throw new Error(`Tipo C desconhecido: ${Object.hasOwn(ann, 'kind') ? (ann as any).kind : ann}`);
+    if (ann.kind === 'function') {
+      const returnC = this.typeAnnotationToCType(ann.returnType);
+      const paramsC = ann.paramTypes.map(p => this.typeAnnotationToCType(p)).join(', ');
+      return `${returnC} (*)(${paramsC})`;
+    }
+    throw new Error(`Tipo C desconhecido: ${(ann as any).kind}`);
   }
 
   private dataTypeToCType(type: DataType): string {

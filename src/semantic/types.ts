@@ -1,7 +1,9 @@
+import { TypeAnnotation } from "../parser/ast";
+
 export type DataType = 'number' | 'function' | 'string';
 
 export interface FunctionSignature {
-  paramTypes: DataType[];
+  paramTypes: TypeAnnotation[];
   returnType: DataType;
 }
 

@@ -31,7 +31,7 @@ export class VariableCollector {
         // É uma atribuição de lambda -> variável função
         const lambda = decl.value as ast.LambdaExpression;
         const signature: FunctionSignature = {
-          paramTypes: lambda.parameters.map(p => this.typeAnnotationToDataType(p.typeAnnotation)),
+          paramTypes: lambda.parameters.map(p => p.typeAnnotation),
           returnType: this.typeAnnotationToDataType(lambda.returnType)
         };
         this.functionVariables.set(decl.identifier, signature);
