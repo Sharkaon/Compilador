@@ -48,8 +48,8 @@
     "column": 9
   },
   {
-    "type": "ENQUANTO",
-    "lexeme": "enquanto",
+    "type": "WHILE",
+    "lexeme": "while",
     "line": 4,
     "column": 1
   },
@@ -57,37 +57,37 @@
     "type": "LPAREN",
     "lexeme": "(",
     "line": 4,
-    "column": 10
+    "column": 7
   },
   {
     "type": "IDENT",
     "lexeme": "contador",
     "line": 4,
-    "column": 11
+    "column": 8
   },
   {
     "type": "LT",
     "lexeme": "<",
     "line": 4,
-    "column": 20
+    "column": 17
   },
   {
     "type": "NUMBER",
     "lexeme": "5",
     "line": 4,
-    "column": 22
+    "column": 19
   },
   {
     "type": "RPAREN",
     "lexeme": ")",
     "line": 4,
-    "column": 23
+    "column": 20
   },
   {
     "type": "LBRACE",
     "lexeme": "{",
     "line": 4,
-    "column": 25
+    "column": 22
   },
   {
     "type": "IDENT",

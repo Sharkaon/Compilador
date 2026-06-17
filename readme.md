@@ -13,7 +13,7 @@ declaração       = atribuição ';'
                  | exprStmt ';'
                  | branchesStmt
                  | iterateStmt
-                 | enquantoStmt
+                 | whileStmt
                  | retorno ';'
 
 atribuição       = IDENT '=' expressão
@@ -24,20 +24,19 @@ retorno          = 'return' expressão?
 
 branchesStmt     = 'branches' ramo+
 
-iterateStmt      = 'iterate' '(' expressão ')' bloco
+iterateStmt      = 'iterate' '(' NUMBER ')' bloco
 
-enquantoStmt     = 'enquanto' '(' condição ')' bloco
+whileStmt        = 'while' '(' condição ')' bloco
 
-ramo             = '(' condição? ')' '->' bloco
-condição         = expressão
+ramo             = '(' condição ')' '->' bloco
+                 | '->' bloco
+condição         = igualdade
 
 ## Blocos e corpo
 bloco            = '{' declaração* '}'
 
 ## Expressões (com precedência)
-expressão        = atribuiçãoExpr
-
-atribuiçãoExpr = IDENT '=' (atribuiçãoExpr | igualdade)
+expressão        = igualdade
 
 igualdade        = relacional ( ('==' | '!=') relacional )*
 
@@ -83,7 +82,7 @@ STRING           = '"' ( [^"] )* '"'
 IDENT            = [a-zA-Z_][a-zA-Z0-9_]*
 
 ## Palavras reservadas:
-branches, iterate, enquanto, return, number, string, boolean, true, false
+branches, iterate, while, return, number, string, boolean, true, false
 
 ## Operadores e pontuadores:
 '='  '=='  '!='  '<'  '>'  '<='  '>='
@@ -109,4 +108,4 @@ O número de cada programa é
   7 -> erro_lexico.sds
   8 -> erro_sintatico.sds
   9 -> booleano.sds
-  10 -> enquanto.sds
+  10 -> while.sds

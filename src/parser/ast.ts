@@ -13,12 +13,12 @@ export type Declaration =
 
 export interface IterateStmt {
   type: 'IterateStmt';
-  expression: Expression;
+  count: NumberLiteral;
   body: Block;
 }
 
-export interface EnquantoStmt {
-  type: 'EnquantoStmt';
+export interface WhileStmt {
+  type: 'WhileStmt';
   condition: Expression;
   body: Block;
 }
@@ -171,7 +171,7 @@ export type Node =
   | ExprStmt
   | ReturnStmt
   | BranchesStmt
-  | EnquantoStmt
+  | WhileStmt
   | Branch
   | Block
   | Expression

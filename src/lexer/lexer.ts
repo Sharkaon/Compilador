@@ -3,7 +3,7 @@ import { Tokenizer } from "./tokenizer";
 export type Keyword = 
   | 'BRANCHES'
   | 'ITERATE'
-  | 'ENQUANTO'
+  | 'WHILE'
   | 'RETURN'
   | 'STRING_TYPE'
   | 'NUMBER_TYPE'

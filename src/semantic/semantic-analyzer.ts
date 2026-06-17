@@ -287,8 +287,8 @@ export class SemanticAnalyzer {
       case 'IterateStmt':
         this.visitIterateStmt(decl);
         break;
-      case 'EnquantoStmt':
-        this.visitEnquantoStmt(decl);
+      case 'WhileStmt':
+        this.visitWhileStmt(decl);
         break;
       case 'ReturnStmt':
         this.visitReturnStmt(decl);
@@ -429,12 +429,8 @@ export class SemanticAnalyzer {
   }
 
   private visitIterateStmt(stmt: ast.IterateStmt): void {
-    const controlType = this.visitExpression(stmt.expression);
-    if (controlType !== 'number') {
-      throw new Error(`Iterate espera expressão numérica para o número de repetições.`);
-    }
     // Geração de código C: for (int _i = 0; _i < N; _i++) { ... }
-    const controlCode = this.expressionToC(stmt.expression);
+    const controlCode = this.expressionToC(stmt.count);
     const loopVar = `_i${this.loopCounter++}`;
     this.emit(`for (int ${loopVar} = 0; ${loopVar} < ${controlCode}; ${loopVar}++) {`);
     this.indentLevel++;
@@ -443,10 +439,10 @@ export class SemanticAnalyzer {
     this.emit(`}`);
   }
 
-  private visitEnquantoStmt(stmt: ast.EnquantoStmt): void {
+  private visitWhileStmt(stmt: ast.WhileStmt): void {
     const conditionType = this.visitExpression(stmt.condition);
     if (!this.areTypesCompatible(conditionType, 'boolean')) {
-      throw new Error(`Enquanto espera expressão booleana ou numérica para a condição.`);
+      throw new Error(`While expects a boolean or numeric condition.`);
     }
 
     const conditionCode = this.expressionToC(stmt.condition);

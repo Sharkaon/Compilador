@@ -50,10 +50,9 @@ export class VariableCollector {
         }
         break;
       case 'IterateStmt':
-        this.visitExpression(decl.expression);
         this.visitBlock(decl.body);
         break;
-      case 'EnquantoStmt':
+      case 'WhileStmt':
         this.visitExpression(decl.condition);
         this.visitBlock(decl.body);
         break;
