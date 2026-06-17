@@ -73,6 +73,8 @@ export class VariableCollector {
       case 'StringLiteral':
         // String literal não adiciona variável
         break;
+      case 'BooleanLiteral':
+        break;
       case 'Identifier':
         // Identificador: registra a variável com tipo padrão 'number'
         // (será atualizado se houver uma atribuição posterior)
@@ -114,6 +116,8 @@ export class VariableCollector {
         return 'number';
       case 'StringLiteral':
         return 'string';
+      case 'BooleanLiteral':
+        return 'boolean';
       case 'Identifier': {
         const existing = this.variables.get(expr.name);
         return existing || 'number'; // fallback para number se não encontrado
@@ -150,10 +154,14 @@ export class VariableCollector {
     if (existing && skipIfExiting) return;
 
     if (existing && existing !== type) {
-      throw new Error(
-        `Tipo conflitante para variável '${name}': já definida como '${existing}', agora '${type}'.`
-      );
+      const numericTypes: DataType[] = ['number', 'boolean'];
+      if (!(numericTypes.includes(existing) && numericTypes.includes(type))) {
+        throw new Error(
+          `Tipo conflitante para variável '${name}': já definida como '${existing}', agora '${type}'.`
+        );
+      }
     }
+
     if (!existing) {
       this.variables.set(name, type);
     }
@@ -178,6 +186,7 @@ export class VariableCollector {
   private typeAnnotationToDataType(ann: ast.TypeAnnotation): DataType {
     if (ann.kind === 'number') return 'number';
     if (ann.kind === 'string') return 'string';
+    if (ann.kind === 'boolean') return 'boolean';
     if (ann.kind === 'function') return 'function';
     return 'number';
   }

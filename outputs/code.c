@@ -2,19 +2,28 @@
 #include <stdlib.h>
 #include <string.h>
 
-int __lambda_0(int n) {
-    if (n <= 1) {
+int __lambda_0(int x) {
+    if (x > 10) {
         return 1;
     }
     else {
-        return n * __lambda_0(n - 1);
+        return 0;
     }
 }
 
 int main() {
-    int (*factorial)(int);
+    void* (*verifica)(int);
 
-    factorial = __lambda_0;
-    factorial = __lambda_0;
-    printf("%d\n", factorial(11));
+    int ativo, desligado, resultado;
+    
+    ativo = 1;
+    desligado = 0;
+    printf("%d\n", ativo);
+    printf("%d\n", desligado);
+    verifica = __lambda_0;
+    verifica = __lambda_0;
+    resultado = verifica(15);
+    printf("%d\n", resultado);
+    resultado = verifica(5);
+    printf("%d\n", resultado);
 }

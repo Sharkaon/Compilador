@@ -1,0 +1,16 @@
+ativo = true;
+desligado = false;
+escrever(ativo);
+escrever(desligado);
+
+verifica = (x: number) -> boolean {
+    branches
+        (x > 10) -> { return true; }
+        -> { return false; }
+};
+
+resultado = verifica(15);
+escrever(resultado);
+
+resultado = verifica(5);
+escrever(resultado);
