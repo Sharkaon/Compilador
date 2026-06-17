@@ -100,6 +100,7 @@ export interface MultiplicativeExpression {
 export type PrimaryExpression =
   | NumberLiteral
   | StringLiteral
+  | BooleanLiteral
   | Identifier
   | ParenthesizedExpression
   | FunctionCall
@@ -113,6 +114,11 @@ export interface NumberLiteral {
 export interface StringLiteral {
   type: 'StringLiteral';
   value: string;
+}
+
+export interface BooleanLiteral {
+  type: 'BooleanLiteral';
+  value: boolean;
 }
 
 export interface Identifier {
@@ -149,6 +155,7 @@ export interface Parameter {
 export type TypeAnnotation = 
   | { kind: 'number' }
   | { kind: 'string' }
+  | { kind: 'boolean' }
   | { kind: 'function'; paramTypes: TypeAnnotation[]; returnType: TypeAnnotation };
 
 export type Node =
@@ -168,6 +175,7 @@ export type Node =
   | PrimaryExpression
   | NumberLiteral
   | StringLiteral
+  | BooleanLiteral
   | Identifier
   | ParenthesizedExpression
   | FunctionCall

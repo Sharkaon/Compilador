@@ -3,20 +3,68 @@
   "declarations": [
     {
       "type": "AssignmentStmt",
-      "identifier": "factorial",
+      "identifier": "ativo",
+      "value": {
+        "type": "BooleanLiteral",
+        "value": true
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "desligado",
+      "value": {
+        "type": "BooleanLiteral",
+        "value": false
+      }
+    },
+    {
+      "type": "ExprStmt",
+      "expression": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "escrever"
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "ativo"
+          }
+        ]
+      }
+    },
+    {
+      "type": "ExprStmt",
+      "expression": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "escrever"
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "desligado"
+          }
+        ]
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "verifica",
       "value": {
         "type": "LambdaExpression",
         "parameters": [
           {
             "type": "Parameter",
-            "name": "n",
+            "name": "x",
             "typeAnnotation": {
               "kind": "number"
             }
           }
         ],
         "returnType": {
-          "kind": "number"
+          "kind": "boolean"
         },
         "body": {
           "type": "Block",
@@ -30,12 +78,12 @@
                     "type": "RelationalExpression",
                     "left": {
                       "type": "Identifier",
-                      "name": "n"
+                      "name": "x"
                     },
-                    "operator": "<=",
+                    "operator": ">",
                     "right": {
                       "type": "NumberLiteral",
-                      "value": 1
+                      "value": 10
                     }
                   },
                   "block": {
@@ -44,8 +92,8 @@
                       {
                         "type": "ReturnStmt",
                         "value": {
-                          "type": "NumberLiteral",
-                          "value": 1
+                          "type": "BooleanLiteral",
+                          "value": true
                         }
                       }
                     ]
@@ -59,33 +107,8 @@
                       {
                         "type": "ReturnStmt",
                         "value": {
-                          "type": "MultiplicativeExpression",
-                          "left": {
-                            "type": "Identifier",
-                            "name": "n"
-                          },
-                          "operator": "*",
-                          "right": {
-                            "type": "FunctionCall",
-                            "callee": {
-                              "type": "Identifier",
-                              "name": "factorial"
-                            },
-                            "arguments": [
-                              {
-                                "type": "AdditiveExpression",
-                                "left": {
-                                  "type": "Identifier",
-                                  "name": "n"
-                                },
-                                "operator": "-",
-                                "right": {
-                                  "type": "NumberLiteral",
-                                  "value": 1
-                                }
-                              }
-                            ]
-                          }
+                          "type": "BooleanLiteral",
+                          "value": false
                         }
                       }
                     ]
@@ -98,6 +121,23 @@
       }
     },
     {
+      "type": "AssignmentStmt",
+      "identifier": "resultado",
+      "value": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "verifica"
+        },
+        "arguments": [
+          {
+            "type": "NumberLiteral",
+            "value": 15
+          }
+        ]
+      }
+    },
+    {
       "type": "ExprStmt",
       "expression": {
         "type": "FunctionCall",
@@ -107,17 +147,41 @@
         },
         "arguments": [
           {
-            "type": "FunctionCall",
-            "callee": {
-              "type": "Identifier",
-              "name": "factorial"
-            },
-            "arguments": [
-              {
-                "type": "NumberLiteral",
-                "value": 11
-              }
-            ]
+            "type": "Identifier",
+            "name": "resultado"
+          }
+        ]
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "resultado",
+      "value": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "verifica"
+        },
+        "arguments": [
+          {
+            "type": "NumberLiteral",
+            "value": 5
+          }
+        ]
+      }
+    },
+    {
+      "type": "ExprStmt",
+      "expression": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "escrever"
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "resultado"
           }
         ]
       }
