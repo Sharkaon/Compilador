@@ -8,6 +8,9 @@ export class Tokenizer {
       case 'return':    return 'RETURN';
       case 'number':    return 'NUMBER_TYPE';
       case 'string':    return 'STRING_TYPE';
+      case 'boolean':   return 'BOOLEAN_TYPE';
+      case 'true':      return 'TRUE';
+      case 'false':     return 'FALSE';
     }
     if (Tokenizer.isNumberLexeme(lexeme)) return 'NUMBER';
     if (Tokenizer.isStringLexeme(lexeme)) return 'STRING';

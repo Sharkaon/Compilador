@@ -1,7 +1,7 @@
 [
   {
     "type": "IDENT",
-    "lexeme": "factorial",
+    "lexeme": "ativo",
     "line": 1,
     "column": 1
   },
@@ -9,270 +9,432 @@
     "type": "ASSIGN",
     "lexeme": "=",
     "line": 1,
-    "column": 11
+    "column": 7
   },
   {
-    "type": "LPAREN",
-    "lexeme": "(",
+    "type": "TRUE",
+    "lexeme": "true",
+    "line": 1,
+    "column": 9
+  },
+  {
+    "type": "SEMICOLON",
+    "lexeme": ";",
     "line": 1,
     "column": 13
   },
   {
     "type": "IDENT",
-    "lexeme": "n",
-    "line": 1,
-    "column": 14
+    "lexeme": "desligado",
+    "line": 2,
+    "column": 1
   },
   {
-    "type": "COLON",
-    "lexeme": ":",
-    "line": 1,
-    "column": 15
+    "type": "ASSIGN",
+    "lexeme": "=",
+    "line": 2,
+    "column": 11
   },
   {
-    "type": "NUMBER_TYPE",
-    "lexeme": "number",
-    "line": 1,
-    "column": 17
+    "type": "FALSE",
+    "lexeme": "false",
+    "line": 2,
+    "column": 13
+  },
+  {
+    "type": "SEMICOLON",
+    "lexeme": ";",
+    "line": 2,
+    "column": 18
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "escrever",
+    "line": 3,
+    "column": 1
+  },
+  {
+    "type": "LPAREN",
+    "lexeme": "(",
+    "line": 3,
+    "column": 9
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "ativo",
+    "line": 3,
+    "column": 10
   },
   {
     "type": "RPAREN",
     "lexeme": ")",
-    "line": 1,
-    "column": 23
+    "line": 3,
+    "column": 15
   },
   {
-    "type": "ARROW",
-    "lexeme": "->",
-    "line": 1,
-    "column": 25
+    "type": "SEMICOLON",
+    "lexeme": ";",
+    "line": 3,
+    "column": 16
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "escrever",
+    "line": 4,
+    "column": 1
+  },
+  {
+    "type": "LPAREN",
+    "lexeme": "(",
+    "line": 4,
+    "column": 9
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "desligado",
+    "line": 4,
+    "column": 10
+  },
+  {
+    "type": "RPAREN",
+    "lexeme": ")",
+    "line": 4,
+    "column": 19
+  },
+  {
+    "type": "SEMICOLON",
+    "lexeme": ";",
+    "line": 4,
+    "column": 20
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "verifica",
+    "line": 6,
+    "column": 1
+  },
+  {
+    "type": "ASSIGN",
+    "lexeme": "=",
+    "line": 6,
+    "column": 10
+  },
+  {
+    "type": "LPAREN",
+    "lexeme": "(",
+    "line": 6,
+    "column": 12
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "x",
+    "line": 6,
+    "column": 13
+  },
+  {
+    "type": "COLON",
+    "lexeme": ":",
+    "line": 6,
+    "column": 14
   },
   {
     "type": "NUMBER_TYPE",
     "lexeme": "number",
-    "line": 1,
-    "column": 28
+    "line": 6,
+    "column": 16
+  },
+  {
+    "type": "RPAREN",
+    "lexeme": ")",
+    "line": 6,
+    "column": 22
+  },
+  {
+    "type": "ARROW",
+    "lexeme": "->",
+    "line": 6,
+    "column": 24
+  },
+  {
+    "type": "BOOLEAN_TYPE",
+    "lexeme": "boolean",
+    "line": 6,
+    "column": 27
   },
   {
     "type": "LBRACE",
     "lexeme": "{",
-    "line": 1,
+    "line": 6,
     "column": 35
   },
   {
     "type": "BRANCHES",
     "lexeme": "branches",
-    "line": 2,
+    "line": 7,
     "column": 5
   },
   {
     "type": "LPAREN",
     "lexeme": "(",
-    "line": 3,
+    "line": 8,
     "column": 9
   },
   {
     "type": "IDENT",
-    "lexeme": "n",
-    "line": 3,
+    "lexeme": "x",
+    "line": 8,
     "column": 10
   },
   {
-    "type": "LE",
-    "lexeme": "<=",
-    "line": 3,
+    "type": "GT",
+    "lexeme": ">",
+    "line": 8,
     "column": 12
   },
   {
     "type": "NUMBER",
-    "lexeme": "1",
-    "line": 3,
-    "column": 15
+    "lexeme": "10",
+    "line": 8,
+    "column": 14
   },
   {
     "type": "RPAREN",
     "lexeme": ")",
-    "line": 3,
+    "line": 8,
     "column": 16
   },
   {
     "type": "ARROW",
     "lexeme": "->",
-    "line": 3,
+    "line": 8,
     "column": 18
   },
   {
     "type": "LBRACE",
     "lexeme": "{",
-    "line": 3,
+    "line": 8,
     "column": 21
   },
   {
     "type": "RETURN",
     "lexeme": "return",
-    "line": 3,
+    "line": 8,
     "column": 23
   },
   {
-    "type": "NUMBER",
-    "lexeme": "1",
-    "line": 3,
+    "type": "TRUE",
+    "lexeme": "true",
+    "line": 8,
     "column": 30
   },
   {
     "type": "SEMICOLON",
     "lexeme": ";",
-    "line": 3,
-    "column": 31
+    "line": 8,
+    "column": 34
   },
   {
     "type": "RBRACE",
     "lexeme": "}",
-    "line": 3,
-    "column": 33
+    "line": 8,
+    "column": 36
   },
   {
     "type": "ARROW",
     "lexeme": "->",
-    "line": 4,
+    "line": 9,
     "column": 9
   },
   {
     "type": "LBRACE",
     "lexeme": "{",
-    "line": 4,
+    "line": 9,
     "column": 12
   },
   {
     "type": "RETURN",
     "lexeme": "return",
-    "line": 4,
+    "line": 9,
     "column": 14
   },
   {
-    "type": "IDENT",
-    "lexeme": "n",
-    "line": 4,
+    "type": "FALSE",
+    "lexeme": "false",
+    "line": 9,
     "column": 21
-  },
-  {
-    "type": "TIMES",
-    "lexeme": "*",
-    "line": 4,
-    "column": 23
-  },
-  {
-    "type": "IDENT",
-    "lexeme": "factorial",
-    "line": 4,
-    "column": 25
-  },
-  {
-    "type": "LPAREN",
-    "lexeme": "(",
-    "line": 4,
-    "column": 34
-  },
-  {
-    "type": "IDENT",
-    "lexeme": "n",
-    "line": 4,
-    "column": 35
-  },
-  {
-    "type": "MINUS",
-    "lexeme": "-",
-    "line": 4,
-    "column": 37
-  },
-  {
-    "type": "NUMBER",
-    "lexeme": "1",
-    "line": 4,
-    "column": 39
-  },
-  {
-    "type": "RPAREN",
-    "lexeme": ")",
-    "line": 4,
-    "column": 40
   },
   {
     "type": "SEMICOLON",
     "lexeme": ";",
-    "line": 4,
-    "column": 41
+    "line": 9,
+    "column": 26
   },
   {
     "type": "RBRACE",
     "lexeme": "}",
-    "line": 4,
-    "column": 43
+    "line": 9,
+    "column": 28
   },
   {
     "type": "RBRACE",
     "lexeme": "}",
-    "line": 5,
+    "line": 10,
     "column": 1
   },
   {
     "type": "SEMICOLON",
     "lexeme": ";",
-    "line": 5,
+    "line": 10,
     "column": 2
   },
   {
     "type": "IDENT",
-    "lexeme": "escrever",
-    "line": 7,
+    "lexeme": "resultado",
+    "line": 12,
     "column": 1
   },
   {
-    "type": "LPAREN",
-    "lexeme": "(",
-    "line": 7,
-    "column": 9
+    "type": "ASSIGN",
+    "lexeme": "=",
+    "line": 12,
+    "column": 11
   },
   {
     "type": "IDENT",
-    "lexeme": "factorial",
-    "line": 7,
-    "column": 10
+    "lexeme": "verifica",
+    "line": 12,
+    "column": 13
   },
   {
     "type": "LPAREN",
     "lexeme": "(",
-    "line": 7,
-    "column": 19
+    "line": 12,
+    "column": 21
   },
   {
     "type": "NUMBER",
-    "lexeme": "11",
-    "line": 7,
-    "column": 20
-  },
-  {
-    "type": "RPAREN",
-    "lexeme": ")",
-    "line": 7,
+    "lexeme": "15",
+    "line": 12,
     "column": 22
   },
   {
     "type": "RPAREN",
     "lexeme": ")",
-    "line": 7,
+    "line": 12,
+    "column": 24
+  },
+  {
+    "type": "SEMICOLON",
+    "lexeme": ";",
+    "line": 12,
+    "column": 25
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "escrever",
+    "line": 13,
+    "column": 1
+  },
+  {
+    "type": "LPAREN",
+    "lexeme": "(",
+    "line": 13,
+    "column": 9
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "resultado",
+    "line": 13,
+    "column": 10
+  },
+  {
+    "type": "RPAREN",
+    "lexeme": ")",
+    "line": 13,
+    "column": 19
+  },
+  {
+    "type": "SEMICOLON",
+    "lexeme": ";",
+    "line": 13,
+    "column": 20
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "resultado",
+    "line": 15,
+    "column": 1
+  },
+  {
+    "type": "ASSIGN",
+    "lexeme": "=",
+    "line": 15,
+    "column": 11
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "verifica",
+    "line": 15,
+    "column": 13
+  },
+  {
+    "type": "LPAREN",
+    "lexeme": "(",
+    "line": 15,
+    "column": 21
+  },
+  {
+    "type": "NUMBER",
+    "lexeme": "5",
+    "line": 15,
+    "column": 22
+  },
+  {
+    "type": "RPAREN",
+    "lexeme": ")",
+    "line": 15,
     "column": 23
   },
   {
     "type": "SEMICOLON",
     "lexeme": ";",
-    "line": 7,
+    "line": 15,
     "column": 24
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "escrever",
+    "line": 16,
+    "column": 1
+  },
+  {
+    "type": "LPAREN",
+    "lexeme": "(",
+    "line": 16,
+    "column": 9
+  },
+  {
+    "type": "IDENT",
+    "lexeme": "resultado",
+    "line": 16,
+    "column": 10
+  },
+  {
+    "type": "RPAREN",
+    "lexeme": ")",
+    "line": 16,
+    "column": 19
+  },
+  {
+    "type": "SEMICOLON",
+    "lexeme": ";",
+    "line": 16,
+    "column": 20
   },
   {
     "type": "EOF",
     "lexeme": "",
-    "line": 8,
-    "column": 1
+    "line": 16,
+    "column": 21
   }
 ]

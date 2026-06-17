@@ -111,7 +111,7 @@ export class SemanticAnalyzer {
     for (const [varName, type] of this.globalVariables) {
       if (type === 'string') {
         stringVars.push(`${varName}[256]`);
-      } else if (type === 'number') {
+      } else if (type === 'number' || type === 'boolean') {
         numberVars.push(varName);
       }
     }
@@ -336,7 +336,7 @@ export class SemanticAnalyzer {
       }
     } else {
       // Verifica compatibilidade de tipo (não permitir reatribuir string com number ou vice-versa)
-      if (varInfo.type !== exprType) {
+      if (!this.areTypesCompatible(varInfo.type, exprType)) {
         throw new Error(`Tipo incompatível: variável '${stmt.identifier}' é '${varInfo.type}', mas atribuição é '${exprType}'.`);
       }
     }
@@ -449,13 +449,13 @@ export class SemanticAnalyzer {
     
     if (stmt.value) {
       const exprType = this.visitExpression(stmt.value);
-      if (exprType !== this.currentFunctionReturnType) {
+      if (this.currentFunctionReturnType && !this.areTypesCompatible(exprType, this.currentFunctionReturnType)) {
         throw new Error(`Retorno espera '${this.currentFunctionReturnType}', mas expressão é '${exprType}'.`);
       }
       const code = this.expressionToC(stmt.value);
       this.emit(`return ${code};`);
     } else {
-      if (this.currentFunctionReturnType === 'number') {
+      if (this.currentFunctionReturnType === 'number' || this.currentFunctionReturnType === 'boolean') {
         this.emit(`return 0;`);
       }
     }
@@ -489,6 +489,8 @@ export class SemanticAnalyzer {
         return 'number';
       case 'StringLiteral':
         return 'string';
+      case 'BooleanLiteral':
+        return 'boolean';
       case 'Identifier':
         return this.visitIdentifier(expr);
       case 'ParenthesizedExpression':
@@ -512,7 +514,7 @@ export class SemanticAnalyzer {
     }
     
     const rightType = this.visitExpression(expr.right);
-    if (rightType !== 'number') {
+    if (!this.areTypesCompatible(rightType, 'number')) {
       throw new Error(`Atribuição espera 'number', mas lado direito é '${rightType}'.`);
     }
     return 'number';
@@ -527,7 +529,7 @@ export class SemanticAnalyzer {
       return 'string';
     }
     
-    if (leftType !== 'number' || rightType !== 'number') {
+    if (!this.areTypesCompatible(leftType, 'number') || !this.areTypesCompatible(rightType, 'number')) {
       throw new Error(`Operador '${expr.operator}' requer operandos numéricos.`);
     }
     
@@ -579,7 +581,7 @@ export class SemanticAnalyzer {
     
     for (let i = 0; i < expr.arguments.length; i++) {
       const argType = this.visitExpression(expr.arguments[i]);
-      if (argType !== expectedParams[i]) {
+      if (!this.areTypesCompatible(argType, expectedParams[i]!)) {
         throw new Error(`Argumento ${i + 1} da função '${expr.callee.name}' espera '${expectedParams[i]}', mas é '${argType}'.`);
       }
     }
@@ -593,6 +595,8 @@ export class SemanticAnalyzer {
         return expr.value.toString();
       case 'StringLiteral':
         return `"${expr.value}"`;
+      case 'BooleanLiteral':
+        return expr.value ? '1' : '0';
       case 'Identifier':
         return expr.name;
       case 'ParenthesizedExpression':
@@ -660,12 +664,14 @@ export class SemanticAnalyzer {
   private typeAnnotationToDataType(ann: ast.TypeAnnotation): DataType {
     if (ann.kind === 'number') return 'number';
     if (ann.kind === 'string') return 'string';
+    if (ann.kind === 'boolean') return 'boolean';
     if (ann.kind === 'function') return 'function';
     throw new Error(`Tipo desconhecido: ${Object.hasOwn(ann, 'kind') ? (ann as any).kind : ann}`);
   }
 
   private typeAnnotationToCType(ann: ast.TypeAnnotation): string {
     if (ann.kind === 'number') return 'int';
+    if (ann.kind === 'boolean') return 'int';
     if (ann.kind === 'string') return 'char*';
     if (ann.kind === 'function') {
       const returnC = this.typeAnnotationToCType(ann.returnType);
@@ -679,5 +685,11 @@ export class SemanticAnalyzer {
     if (type === 'number') return 'int';
     if (type === 'string') return 'char*';
     return 'void*';
+  }
+
+  private areTypesCompatible(a: DataType, b: DataType): boolean {
+    if (a === b) return true;
+    const numericTypes: DataType[] = ['number', 'boolean'];
+    return numericTypes.includes(a) && numericTypes.includes(b);
   }
 }

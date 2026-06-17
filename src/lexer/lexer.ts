@@ -5,7 +5,10 @@ export type Keyword =
   | 'ITERATE'
   | 'RETURN'
   | 'STRING_TYPE'
-  | 'NUMBER_TYPE';
+  | 'NUMBER_TYPE'
+  | 'BOOLEAN_TYPE'
+  | 'TRUE'
+  | 'FALSE';
 
 export type Operator =
   | 'ASSIGN'     // '='

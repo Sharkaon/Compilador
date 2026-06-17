@@ -205,6 +205,12 @@ export class Parser {
       const value = raw.slice(1, -1);
       return { type: 'StringLiteral', value };
     }
+    if (this.consumeIfIs('TRUE')) {
+      return { type: 'BooleanLiteral', value: true };
+    }
+    if (this.consumeIfIs('FALSE')) {
+      return { type: 'BooleanLiteral', value: false };
+    }
     if (this.consumeIfIs('IDENT')) {
       const name = this.previous().lexeme;
       if (this.check('LPAREN')) {
@@ -286,6 +292,9 @@ export class Parser {
     }
     if (this.consumeIfIs('STRING_TYPE')) {
       return { kind: 'string' };
+    }
+    if (this.consumeIfIs('BOOLEAN_TYPE')) {
+      return { kind: 'boolean' };
     }
     if (this.consumeIfIs('LPAREN')) {
       const paramTypes: ast.TypeAnnotation[] = [];

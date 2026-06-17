@@ -43,6 +43,8 @@ termo            = fator ( ('*' | '/') fator )*
 
 fator            = NUMBER
                  | STRING
+                 | 'true'
+                 | 'false'
                  | IDENT
                  | '(' expressão ')'
                  | chamada
@@ -64,6 +66,8 @@ parâmetros       = param ( ',' param )*
 param            = IDENT ':' tipo
 
 tipo             = 'number'
+                 | 'string'
+                 | 'boolean'
                  | '(' tipos? ')' '->' tipo
 
 tipos            = tipo ( ',' tipo )*
@@ -74,7 +78,7 @@ STRING           = '"' ( [^"] )* '"'
 IDENT            = [a-zA-Z_][a-zA-Z0-9_]*
 
 ## Palavras reservadas:
-branches, iterate, return, number, true, false
+branches, iterate, return, number, string, boolean, true, false
 
 ## Operadores e pontuadores:
 '='  '=='  '!='  '<'  '>'  '<='  '>='
