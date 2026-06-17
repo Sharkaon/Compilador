@@ -27,6 +27,9 @@ export class Tokenizer {
       case '*':  return 'TIMES';
       case '/':  return 'DIVISION';
       case '->': return 'ARROW';
+      case '&&': return 'AND';
+      case '||': return 'OR';
+      case '!':  return 'NOT';
     }
     switch (lexeme) {
       case '(': return 'LPAREN';

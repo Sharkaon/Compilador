@@ -485,6 +485,10 @@ export class SemanticAnalyzer {
       case 'AdditiveExpression':
       case 'MultiplicativeExpression':
         return this.visitBinaryExpression(expr);
+      case 'LogicalExpression':           // NOVO
+        return this.visitBinaryExpression(expr);
+      case 'UnaryExpression':
+        return this.visitUnaryExpression(expr);
       case 'NumberLiteral':
         return 'number';
       case 'StringLiteral':
@@ -533,6 +537,14 @@ export class SemanticAnalyzer {
       throw new Error(`Operador '${expr.operator}' requer operandos numéricos.`);
     }
     
+    return 'number';
+  }
+
+  private visitUnaryExpression(expr: ast.UnaryExpression): DataType {
+    const operandType = this.visitExpression(expr.operand);
+    if (!this.areTypesCompatible(operandType, 'number')) {
+      throw new Error(`Operador '${expr.operator}' requer operando numérico.`);
+    }
     return 'number';
   }
 
@@ -618,6 +630,10 @@ export class SemanticAnalyzer {
         return `${this.expressionToC(expr.left)} ${expr.operator} ${this.expressionToC(expr.right)}`;
       case 'MultiplicativeExpression':
         return `${this.expressionToC(expr.left)} ${expr.operator} ${this.expressionToC(expr.right)}`;
+      case 'LogicalExpression':
+        return `${this.expressionToC(expr.left)} ${expr.operator} ${this.expressionToC(expr.right)}`;
+      case 'UnaryExpression':
+        return `!${this.expressionToC(expr.operand)}`;
       case 'FunctionCall':
         const calleeName = expr.callee.name;
         // Se a função atual tem um nome original e o callee é esse nome, substitui pelo nome da lambda

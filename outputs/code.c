@@ -2,28 +2,29 @@
 #include <stdlib.h>
 #include <string.h>
 
-int __lambda_0(int x) {
-    if (x > 10) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
+int __lambda_0(int x, int min, int max) {
+    return x >= min && x <= max;
 }
 
 int main() {
-    void* (*verifica)(int);
+    void* (*estaNaFaixa)(int, int, int);
 
-    int ativo, desligado, resultado;
+    int a, b, resultado;
     
-    ativo = 1;
-    desligado = 0;
-    printf("%d\n", ativo);
-    printf("%d\n", desligado);
-    verifica = __lambda_0;
-    verifica = __lambda_0;
-    resultado = verifica(15);
+    a = 10;
+    b = 5;
+    resultado = a > 3 && b < 10;
     printf("%d\n", resultado);
-    resultado = verifica(5);
+    resultado = a > 100 || b < 10;
     printf("%d\n", resultado);
+    resultado = !0;
+    printf("%d\n", resultado);
+    resultado = !1;
+    printf("%d\n", resultado);
+    resultado = !(a > 100) && b < 10;
+    printf("%d\n", resultado);
+    estaNaFaixa = __lambda_0;
+    estaNaFaixa = __lambda_0;
+    printf("%d\n", estaNaFaixa(15, 10, 20));
+    printf("%d\n", estaNaFaixa(5, 10, 20));
 }

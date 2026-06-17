@@ -145,7 +145,25 @@ export class Parser {
       const right = this.parseAssignmentExpression(); // lado direito pode ser outra atribuição
       return { type: 'AssignmentExpression', left, right };
     }
-    return this.parseEqualityExpression();
+    return this.parseOrExpression();
+  }
+
+  private parseOrExpression(): ast.Expression {
+    let left = this.parseAndExpression();
+    while (this.consumeIfIs('OR')) {
+      const right = this.parseAndExpression();
+      left = { type: 'LogicalExpression', left, operator: '||', right };
+    }
+    return left;
+  }
+
+  private parseAndExpression(): ast.Expression {
+    let left = this.parseEqualityExpression();
+    while (this.consumeIfIs('AND')) {
+      const right = this.parseEqualityExpression();
+      left = { type: 'LogicalExpression', left, operator: '&&', right };
+    }
+    return left;
   }
 
   private parseEqualityExpression(): ast.Expression {
@@ -186,13 +204,21 @@ export class Parser {
   }
 
   private parseMultiplicativeExpression(): ast.Expression {
-    let left: ast.Expression = this.parsePrimaryExpression();
+    let left: ast.Expression = this.parseUnaryExpression();
     while (this.consumeIfIs('TIMES', 'DIVISION')) {
       const operator = this.previous().type === 'TIMES' ? '*' : '/';
-      const right = this.parsePrimaryExpression();
+      const right = this.parseUnaryExpression();
       left = { type: 'MultiplicativeExpression', left, operator, right };
     }
     return left;
+  }
+
+    private parseUnaryExpression(): ast.Expression {
+    if (this.consumeIfIs('NOT')) {
+      const operand = this.parseUnaryExpression();
+      return { type: 'UnaryExpression', operator: '!', operand };
+    }
+    return this.parsePrimaryExpression();
   }
 
   private parsePrimaryExpression(): ast.PrimaryExpression {

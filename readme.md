@@ -31,7 +31,11 @@ bloco            = '{' declaração* '}'
 ## Expressões (com precedência)
 expressão        = atribuiçãoExpr
 
-atribuiçãoExpr = IDENT '=' (atribuiçãoExpr | igualdade)
+atribuiçãoExpr = IDENT '=' (atribuiçãoExpr | ouLogico)
+
+ouLogico         = eLogico ( '||' eLogico )*
+
+eLogico          = igualdade ( '&&' igualdade )*
 
 igualdade        = relacional ( ('==' | '!=') relacional )*
 
@@ -39,7 +43,10 @@ relacional       = aditiva ( ('<' | '>' | '<=' | '>=') aditiva )*
 
 aditiva          = termo ( ('+' | '-') termo )*
 
-termo            = fator ( ('*' | '/') fator )*
+termo            = unario ( ('*' | '/') unario )*
+
+unario           = '!' unario
+                 | fator
 
 fator            = NUMBER
                  | STRING
@@ -84,6 +91,7 @@ branches, iterate, return, number, string, boolean, true, false
 '='  '=='  '!='  '<'  '>'  '<='  '>='
 '+'  '-'  '*'  '/'
 '('  ')'  '{'  '}'  ';'  ','  ':'  '->'
+'&&'  '||'  '!'
 
 # Como Rodar
 

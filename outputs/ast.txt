@@ -3,18 +3,50 @@
   "declarations": [
     {
       "type": "AssignmentStmt",
-      "identifier": "ativo",
+      "identifier": "a",
       "value": {
-        "type": "BooleanLiteral",
-        "value": true
+        "type": "NumberLiteral",
+        "value": 10
       }
     },
     {
       "type": "AssignmentStmt",
-      "identifier": "desligado",
+      "identifier": "b",
       "value": {
-        "type": "BooleanLiteral",
-        "value": false
+        "type": "NumberLiteral",
+        "value": 5
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "resultado",
+      "value": {
+        "type": "LogicalExpression",
+        "left": {
+          "type": "RelationalExpression",
+          "left": {
+            "type": "Identifier",
+            "name": "a"
+          },
+          "operator": ">",
+          "right": {
+            "type": "NumberLiteral",
+            "value": 3
+          }
+        },
+        "operator": "&&",
+        "right": {
+          "type": "RelationalExpression",
+          "left": {
+            "type": "Identifier",
+            "name": "b"
+          },
+          "operator": "<",
+          "right": {
+            "type": "NumberLiteral",
+            "value": 10
+          }
+        }
       }
     },
     {
@@ -28,9 +60,41 @@
         "arguments": [
           {
             "type": "Identifier",
-            "name": "ativo"
+            "name": "resultado"
           }
         ]
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "resultado",
+      "value": {
+        "type": "LogicalExpression",
+        "left": {
+          "type": "RelationalExpression",
+          "left": {
+            "type": "Identifier",
+            "name": "a"
+          },
+          "operator": ">",
+          "right": {
+            "type": "NumberLiteral",
+            "value": 100
+          }
+        },
+        "operator": "||",
+        "right": {
+          "type": "RelationalExpression",
+          "left": {
+            "type": "Identifier",
+            "name": "b"
+          },
+          "operator": "<",
+          "right": {
+            "type": "NumberLiteral",
+            "value": 10
+          }
+        }
       }
     },
     {
@@ -44,20 +108,145 @@
         "arguments": [
           {
             "type": "Identifier",
-            "name": "desligado"
+            "name": "resultado"
           }
         ]
       }
     },
     {
       "type": "AssignmentStmt",
-      "identifier": "verifica",
+      "identifier": "resultado",
+      "value": {
+        "type": "UnaryExpression",
+        "operator": "!",
+        "operand": {
+          "type": "BooleanLiteral",
+          "value": false
+        }
+      }
+    },
+    {
+      "type": "ExprStmt",
+      "expression": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "escrever"
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "resultado"
+          }
+        ]
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "resultado",
+      "value": {
+        "type": "UnaryExpression",
+        "operator": "!",
+        "operand": {
+          "type": "BooleanLiteral",
+          "value": true
+        }
+      }
+    },
+    {
+      "type": "ExprStmt",
+      "expression": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "escrever"
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "resultado"
+          }
+        ]
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "resultado",
+      "value": {
+        "type": "LogicalExpression",
+        "left": {
+          "type": "UnaryExpression",
+          "operator": "!",
+          "operand": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "RelationalExpression",
+              "left": {
+                "type": "Identifier",
+                "name": "a"
+              },
+              "operator": ">",
+              "right": {
+                "type": "NumberLiteral",
+                "value": 100
+              }
+            }
+          }
+        },
+        "operator": "&&",
+        "right": {
+          "type": "RelationalExpression",
+          "left": {
+            "type": "Identifier",
+            "name": "b"
+          },
+          "operator": "<",
+          "right": {
+            "type": "NumberLiteral",
+            "value": 10
+          }
+        }
+      }
+    },
+    {
+      "type": "ExprStmt",
+      "expression": {
+        "type": "FunctionCall",
+        "callee": {
+          "type": "Identifier",
+          "name": "escrever"
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "resultado"
+          }
+        ]
+      }
+    },
+    {
+      "type": "AssignmentStmt",
+      "identifier": "estaNaFaixa",
       "value": {
         "type": "LambdaExpression",
         "parameters": [
           {
             "type": "Parameter",
             "name": "x",
+            "typeAnnotation": {
+              "kind": "number"
+            }
+          },
+          {
+            "type": "Parameter",
+            "name": "min",
+            "typeAnnotation": {
+              "kind": "number"
+            }
+          },
+          {
+            "type": "Parameter",
+            "name": "max",
             "typeAnnotation": {
               "kind": "number"
             }
@@ -70,69 +259,69 @@
           "type": "Block",
           "declarations": [
             {
-              "type": "BranchesStmt",
-              "branches": [
-                {
-                  "type": "Branch",
-                  "condition": {
-                    "type": "RelationalExpression",
-                    "left": {
-                      "type": "Identifier",
-                      "name": "x"
-                    },
-                    "operator": ">",
-                    "right": {
-                      "type": "NumberLiteral",
-                      "value": 10
-                    }
+              "type": "ReturnStmt",
+              "value": {
+                "type": "LogicalExpression",
+                "left": {
+                  "type": "RelationalExpression",
+                  "left": {
+                    "type": "Identifier",
+                    "name": "x"
                   },
-                  "block": {
-                    "type": "Block",
-                    "declarations": [
-                      {
-                        "type": "ReturnStmt",
-                        "value": {
-                          "type": "BooleanLiteral",
-                          "value": true
-                        }
-                      }
-                    ]
+                  "operator": ">=",
+                  "right": {
+                    "type": "Identifier",
+                    "name": "min"
                   }
                 },
-                {
-                  "type": "Branch",
-                  "block": {
-                    "type": "Block",
-                    "declarations": [
-                      {
-                        "type": "ReturnStmt",
-                        "value": {
-                          "type": "BooleanLiteral",
-                          "value": false
-                        }
-                      }
-                    ]
+                "operator": "&&",
+                "right": {
+                  "type": "RelationalExpression",
+                  "left": {
+                    "type": "Identifier",
+                    "name": "x"
+                  },
+                  "operator": "<=",
+                  "right": {
+                    "type": "Identifier",
+                    "name": "max"
                   }
                 }
-              ]
+              }
             }
           ]
         }
       }
     },
     {
-      "type": "AssignmentStmt",
-      "identifier": "resultado",
-      "value": {
+      "type": "ExprStmt",
+      "expression": {
         "type": "FunctionCall",
         "callee": {
           "type": "Identifier",
-          "name": "verifica"
+          "name": "escrever"
         },
         "arguments": [
           {
-            "type": "NumberLiteral",
-            "value": 15
+            "type": "FunctionCall",
+            "callee": {
+              "type": "Identifier",
+              "name": "estaNaFaixa"
+            },
+            "arguments": [
+              {
+                "type": "NumberLiteral",
+                "value": 15
+              },
+              {
+                "type": "NumberLiteral",
+                "value": 10
+              },
+              {
+                "type": "NumberLiteral",
+                "value": 20
+              }
+            ]
           }
         ]
       }
@@ -147,41 +336,25 @@
         },
         "arguments": [
           {
-            "type": "Identifier",
-            "name": "resultado"
-          }
-        ]
-      }
-    },
-    {
-      "type": "AssignmentStmt",
-      "identifier": "resultado",
-      "value": {
-        "type": "FunctionCall",
-        "callee": {
-          "type": "Identifier",
-          "name": "verifica"
-        },
-        "arguments": [
-          {
-            "type": "NumberLiteral",
-            "value": 5
-          }
-        ]
-      }
-    },
-    {
-      "type": "ExprStmt",
-      "expression": {
-        "type": "FunctionCall",
-        "callee": {
-          "type": "Identifier",
-          "name": "escrever"
-        },
-        "arguments": [
-          {
-            "type": "Identifier",
-            "name": "resultado"
+            "type": "FunctionCall",
+            "callee": {
+              "type": "Identifier",
+              "name": "estaNaFaixa"
+            },
+            "arguments": [
+              {
+                "type": "NumberLiteral",
+                "value": 5
+              },
+              {
+                "type": "NumberLiteral",
+                "value": 10
+              },
+              {
+                "type": "NumberLiteral",
+                "value": 20
+              }
+            ]
           }
         ]
       }

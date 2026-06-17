@@ -22,7 +22,10 @@ export type Operator =
   | 'MINUS'      // '-'
   | 'TIMES'      // '*'
   | 'DIVISION'   // '/'
-  | 'ARROW';     // '->'
+  | 'ARROW'      // '->'
+  | 'AND'        // '&&'
+  | 'OR'         // '||'
+  | 'NOT';       // '!'
 
 export type Delimiter = 
   | 'LPAREN'     // '('
@@ -194,7 +197,7 @@ export class Lexer {
     if (this.position + 1 >= this.src.length) return null;
     const second = this.src[this.position + 1];
     const twoChar = first + second;
-    const ops = ['->', '==', '!=', '<=', '>='];
+    const ops = ['->', '==', '!=', '<=', '>=', '&&', '||'];
     if (ops.includes(twoChar)) {
       this.advanceBy(2);
       return twoChar;
@@ -205,7 +208,7 @@ export class Lexer {
   private readSingleCharOperator(): Lexeme | null {
     if (this.isSourceFinished()) return null;
     const ch = this.currentChar!;
-    const singleChars = ['=', '<', '>', '+', '-', '*', '/', '(', ')', '{', '}', ';', ',', ':'];
+    const singleChars = ['=', '<', '>', '+', '-', '*', '/', '(', ')', '{', '}', ';', ',', ':', '!'];
     if (singleChars.includes(ch)) {
       this.advance();
       return ch;

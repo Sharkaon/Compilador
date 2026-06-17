@@ -97,6 +97,13 @@ export class VariableCollector {
         this.visitExpression(expr.left);
         this.visitExpression(expr.right);
         break;
+      case 'LogicalExpression':           // NOVO
+        this.visitExpression(expr.left);
+        this.visitExpression(expr.right);
+        break;
+      case 'UnaryExpression':
+        this.visitExpression(expr.operand);
+        break;
       case 'FunctionCall':
         for (const arg of expr.arguments) {
           this.visitExpression(arg);
@@ -138,6 +145,10 @@ export class VariableCollector {
         return 'number';
       case 'MultiplicativeExpression':
         return 'number'; // operações aritméticas retornam number
+      case 'LogicalExpression':
+        return 'number';
+      case 'UnaryExpression':
+        return 'number';
       case 'FunctionCall':
         return 'number'; // assumimos que funções retornam number
       case 'LambdaExpression':

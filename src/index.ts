@@ -13,7 +13,8 @@ const TEST_MAP = {
   '6': 'tests/fatorial.sds',
   '7': 'tests/erro_lexico.sds',
   '8': 'tests/erro_sintatico.sds',
-  '9': 'tests/booleano.sds'
+  '9': 'tests/booleano.sds',
+  '10': 'tests/logicos.sds'
 } as const;
 
 const chosenText = TEST_MAP[process.argv[2] as keyof typeof TEST_MAP] ?? 'tests/programa.sds';

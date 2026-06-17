@@ -56,15 +56,24 @@ export interface Block {
 
 export type Expression =
   | AssignmentExpression
+  | LogicalExpression
   | EqualityExpression
   | RelationalExpression
   | AdditiveExpression
   | MultiplicativeExpression
+  | UnaryExpression
   | PrimaryExpression;
 
 export interface AssignmentExpression {
   type: 'AssignmentExpression';
   left: Identifier;
+  right: Expression;
+}
+
+export interface LogicalExpression {
+  type: 'LogicalExpression';
+  left: Expression;
+  operator: '&&' | '||';
   right: Expression;
 }
 
@@ -94,6 +103,12 @@ export interface MultiplicativeExpression {
   left: Expression;
   operator: '*' | '/';
   right: Expression;
+}
+
+export interface UnaryExpression {
+  type: 'UnaryExpression';
+  operator: '!';
+  operand: Expression;
 }
 
 // Primários: literais, identificador, parênteses, chamada, lambda, iterate
@@ -168,6 +183,8 @@ export type Node =
   | Block
   | Expression
   | AssignmentExpression
+  | LogicalExpression
+  | UnaryExpression
   | EqualityExpression
   | RelationalExpression
   | AdditiveExpression
