@@ -2,28 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-int __lambda_0(int x) {
-    if (x > 10) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
-
 int main() {
-    void* (*verifica)(int);
-
-    int ativo, desligado, resultado;
+    int contador, soma;
     
-    ativo = 1;
-    desligado = 0;
-    printf("%d\n", ativo);
-    printf("%d\n", desligado);
-    verifica = __lambda_0;
-    verifica = __lambda_0;
-    resultado = verifica(15);
-    printf("%d\n", resultado);
-    resultado = verifica(5);
-    printf("%d\n", resultado);
+    contador = 0;
+    soma = 0;
+    while (contador < 5) {
+        contador = contador + 1;
+        soma = soma + contador;
+    }
+    printf("%d\n", soma);
 }

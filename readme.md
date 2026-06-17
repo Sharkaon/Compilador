@@ -12,6 +12,8 @@ programa         = declaração*
 declaração       = atribuição ';'
                  | exprStmt ';'
                  | branchesStmt
+                 | iterateStmt
+                 | enquantoStmt
                  | retorno ';'
 
 atribuição       = IDENT '=' expressão
@@ -21,6 +23,10 @@ exprStmt         = expressão
 retorno          = 'return' expressão?
 
 branchesStmt     = 'branches' ramo+
+
+iterateStmt      = 'iterate' '(' expressão ')' bloco
+
+enquantoStmt     = 'enquanto' '(' condição ')' bloco
 
 ramo             = '(' condição? ')' '->' bloco
 condição         = expressão
@@ -49,7 +55,6 @@ fator            = NUMBER
                  | '(' expressão ')'
                  | chamada
                  | lambda
-                 | 'iterate' '(' expressão ')' bloco      // repetição
 
 ## Chamada de função
 chamada          = primária '(' argumentos? ')'
@@ -58,8 +63,8 @@ primária         = IDENT
                  | '(' expressão ')'
 
 argumentos       = expressão ( ',' expressão )*
-Função lambda (expressão)
-text
+
+## Função lambda (expressão)
 lambda           = '(' parâmetros? ')' '->' tipo bloco
 
 parâmetros       = param ( ',' param )*
@@ -78,7 +83,7 @@ STRING           = '"' ( [^"] )* '"'
 IDENT            = [a-zA-Z_][a-zA-Z0-9_]*
 
 ## Palavras reservadas:
-branches, iterate, return, number, string, boolean, true, false
+branches, iterate, enquanto, return, number, string, boolean, true, false
 
 ## Operadores e pontuadores:
 '='  '=='  '!='  '<'  '>'  '<='  '>='
@@ -103,3 +108,5 @@ O número de cada programa é
   6 -> fatorial.sds
   7 -> erro_lexico.sds
   8 -> erro_sintatico.sds
+  9 -> booleano.sds
+  10 -> enquanto.sds

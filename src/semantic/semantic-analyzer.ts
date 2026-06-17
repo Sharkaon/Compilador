@@ -287,6 +287,9 @@ export class SemanticAnalyzer {
       case 'IterateStmt':
         this.visitIterateStmt(decl);
         break;
+      case 'EnquantoStmt':
+        this.visitEnquantoStmt(decl);
+        break;
       case 'ReturnStmt':
         this.visitReturnStmt(decl);
         break;
@@ -299,14 +302,12 @@ export class SemanticAnalyzer {
     
     // Verifica se a variável existe
     let varInfo = this.currentScope.lookup(stmt.identifier);
-    console.log(varInfo);
     if (!varInfo) {
       if (stmt.value.type === 'LambdaExpression') {
         // É uma função
         const lambda = stmt.value as ast.LambdaExpression;
         const paramTypes = lambda.parameters.map(p => this.typeAnnotationToDataType(p.typeAnnotation));
         const returnType = this.typeAnnotationToDataType(lambda.returnType);
-        console.log('LAMBDAA');
         this.currentScope.declare(stmt.identifier, {
           name: stmt.identifier,
           type: 'function',
@@ -436,6 +437,20 @@ export class SemanticAnalyzer {
     const controlCode = this.expressionToC(stmt.expression);
     const loopVar = `_i${this.loopCounter++}`;
     this.emit(`for (int ${loopVar} = 0; ${loopVar} < ${controlCode}; ${loopVar}++) {`);
+    this.indentLevel++;
+    this.visitBlock(stmt.body);
+    this.indentLevel--;
+    this.emit(`}`);
+  }
+
+  private visitEnquantoStmt(stmt: ast.EnquantoStmt): void {
+    const conditionType = this.visitExpression(stmt.condition);
+    if (!this.areTypesCompatible(conditionType, 'boolean')) {
+      throw new Error(`Enquanto espera expressão booleana ou numérica para a condição.`);
+    }
+
+    const conditionCode = this.expressionToC(stmt.condition);
+    this.emit(`while (${conditionCode}) {`);
     this.indentLevel++;
     this.visitBlock(stmt.body);
     this.indentLevel--;

@@ -70,6 +70,9 @@ export class Parser {
     if (this.consumeIfIs('ITERATE')) {
       return this.parseIterateStmt();
     }
+    if (this.consumeIfIs('ENQUANTO')) {
+      return this.parseEnquantoStmt();
+    }
     if (this.check('IDENT') && this.peekNext()?.type === 'ASSIGN') {
       return this.parseAssignmentStmt();
     }
@@ -84,6 +87,14 @@ export class Parser {
     this.consume('RPAREN', "Expected ')' after iterate expression");
     const body = this.parseBlock();
     return { type: 'IterateStmt', expression: expr, body };
+  }
+
+  private parseEnquantoStmt(): ast.EnquantoStmt {
+    this.consume('LPAREN', "Expected '(' after 'enquanto'");
+    const condition = this.parseExpression();
+    this.consume('RPAREN', "Expected ')' after enquanto condition");
+    const body = this.parseBlock();
+    return { type: 'EnquantoStmt', condition, body };
   }
 
   private parseAssignmentStmt(): ast.AssignmentStmt {

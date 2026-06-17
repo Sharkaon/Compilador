@@ -53,6 +53,10 @@ export class VariableCollector {
         this.visitExpression(decl.expression);
         this.visitBlock(decl.body);
         break;
+      case 'EnquantoStmt':
+        this.visitExpression(decl.condition);
+        this.visitBlock(decl.body);
+        break;
       case 'ReturnStmt':
         if (decl.value) this.visitExpression(decl.value);
         break;

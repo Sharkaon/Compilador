@@ -1,0 +1,9 @@
+contador = 0;
+soma = 0;
+
+enquanto (contador < 5) {
+    contador = contador + 1;
+    soma = soma + contador;
+}
+
+escrever(soma);
