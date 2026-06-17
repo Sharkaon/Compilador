@@ -1,2 +1,3 @@
 saudacao = "Olá, mundo!";
+// escrever("Olá, mundo!");
 escrever(saudacao);
