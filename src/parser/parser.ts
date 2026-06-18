@@ -70,6 +70,9 @@ export class Parser {
     if (this.consumeIfIs('ITERATE')) {
       return this.parseIterateStmt();
     }
+    if (this.consumeIfIs('WHILE')) {
+      return this.parseWhileStmt();
+    }
     if (this.check('IDENT') && this.peekNext()?.type === 'ASSIGN') {
       return this.parseAssignmentStmt();
     }
@@ -80,10 +83,22 @@ export class Parser {
 
   private parseIterateStmt(): ast.IterateStmt {
     this.consume('LPAREN', "Expected '(' after 'iterate'");
-    const expr = this.parseExpression();
-    this.consume('RPAREN', "Expected ')' after iterate expression");
+    const numberToken = this.consume('NUMBER', "Expected numeric literal inside 'iterate(...)'");
+    this.consume('RPAREN', "Expected ')' after iterate count");
     const body = this.parseBlock();
-    return { type: 'IterateStmt', expression: expr, body };
+    return {
+      type: 'IterateStmt',
+      count: { type: 'NumberLiteral', value: parseFloat(numberToken.lexeme) },
+      body,
+    };
+  }
+
+  private parseWhileStmt(): ast.WhileStmt {
+    this.consume('LPAREN', "Expected '(' after 'while'");
+    const condition = this.parseExpression();
+    this.consume('RPAREN', "Expected ')' after while condition");
+    const body = this.parseBlock();
+    return { type: 'WhileStmt', condition, body };
   }
 
   private parseAssignmentStmt(): ast.AssignmentStmt {

@@ -287,6 +287,9 @@ export class SemanticAnalyzer {
       case 'IterateStmt':
         this.visitIterateStmt(decl);
         break;
+      case 'WhileStmt':
+        this.visitWhileStmt(decl);
+        break;
       case 'ReturnStmt':
         this.visitReturnStmt(decl);
         break;
@@ -299,14 +302,12 @@ export class SemanticAnalyzer {
     
     // Verifica se a variável existe
     let varInfo = this.currentScope.lookup(stmt.identifier);
-    console.log(varInfo);
     if (!varInfo) {
       if (stmt.value.type === 'LambdaExpression') {
         // É uma função
         const lambda = stmt.value as ast.LambdaExpression;
         const paramTypes = lambda.parameters.map(p => this.typeAnnotationToDataType(p.typeAnnotation));
         const returnType = this.typeAnnotationToDataType(lambda.returnType);
-        console.log('LAMBDAA');
         this.currentScope.declare(stmt.identifier, {
           name: stmt.identifier,
           type: 'function',
@@ -428,14 +429,24 @@ export class SemanticAnalyzer {
   }
 
   private visitIterateStmt(stmt: ast.IterateStmt): void {
-    const controlType = this.visitExpression(stmt.expression);
-    if (controlType !== 'number') {
-      throw new Error(`Iterate espera expressão numérica para o número de repetições.`);
-    }
     // Geração de código C: for (int _i = 0; _i < N; _i++) { ... }
-    const controlCode = this.expressionToC(stmt.expression);
+    const controlCode = this.expressionToC(stmt.count);
     const loopVar = `_i${this.loopCounter++}`;
     this.emit(`for (int ${loopVar} = 0; ${loopVar} < ${controlCode}; ${loopVar}++) {`);
+    this.indentLevel++;
+    this.visitBlock(stmt.body);
+    this.indentLevel--;
+    this.emit(`}`);
+  }
+
+  private visitWhileStmt(stmt: ast.WhileStmt): void {
+    const conditionType = this.visitExpression(stmt.condition);
+    if (!this.areTypesCompatible(conditionType, 'boolean')) {
+      throw new Error(`While expects a boolean or numeric condition.`);
+    }
+
+    const conditionCode = this.expressionToC(stmt.condition);
+    this.emit(`while (${conditionCode}) {`);
     this.indentLevel++;
     this.visitBlock(stmt.body);
     this.indentLevel--;

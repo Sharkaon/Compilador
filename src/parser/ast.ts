@@ -8,11 +8,18 @@ export type Declaration =
   | ExprStmt
   | BranchesStmt
   | IterateStmt
+  | EnquantoStmt
   | ReturnStmt;
 
 export interface IterateStmt {
   type: 'IterateStmt';
-  expression: Expression;
+  count: NumberLiteral;
+  body: Block;
+}
+
+export interface WhileStmt {
+  type: 'WhileStmt';
+  condition: Expression;
   body: Block;
 }
 
@@ -179,6 +186,7 @@ export type Node =
   | ExprStmt
   | ReturnStmt
   | BranchesStmt
+  | WhileStmt
   | Branch
   | Block
   | Expression

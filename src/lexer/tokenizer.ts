@@ -5,6 +5,7 @@ export class Tokenizer {
     switch (lexeme) {
       case 'branches': return 'BRANCHES';
       case 'iterate':   return 'ITERATE';
+      case 'while':     return 'WHILE';
       case 'return':    return 'RETURN';
       case 'number':    return 'NUMBER_TYPE';
       case 'string':    return 'STRING_TYPE';
