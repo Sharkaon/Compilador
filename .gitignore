@@ -4,3 +4,4 @@ outputs/
 outputs/tokens.txt
 outputs/ast.txt
 outputs/code.c
+a.out
