@@ -35,10 +35,10 @@ const ast = new Parser(tokens).parseProgram();
 writeFileSync('outputs/ast.txt', JSON.stringify(ast, null, 2));
 
 const cCode = new SemanticAnalyzer().analyze(ast);
-writeFileSync('outputs/code.c', cCode);
+writeFileSync('outputs/main.c', cCode);
 const compilationTimeMs = Date.now() - compilationStart;
 console.log(
   `Compilacao concluida em ${compilationTimeMs} ms.\n` +
-  `Saida gerada em: outputs/code.c\n` +
+  `Saida gerada em: outputs/main.c\n` +
   `Execute com: npm run run-compiled`
 );

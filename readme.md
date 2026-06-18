@@ -109,20 +109,22 @@ branches, iterate, while, return, number, string, boolean, true, false
 # Como Rodar
 
 Tendo node instalado no seu sistema, rodar `npx ts-node src/index.ts`
-Isso vai compilar o código em tests/programa.sds
-O output será criado em outputs/code.c
+Sem argumentos, isso vai compilar o código em `tests/programa.sds`
+O output será criado em outputs/main.c
 O código C pode ser executado com "npm run run-compiled"
 
 ### Programas padrão de teste
-Foram incluídos, na pasta tests/, alguns programas prontos na linguagem fantasia que podem ser executados com `npx ts-node src/index.ts <NÚMERO>`
-O número de cada programa é
-  1 -> ola.sds
-  2 -> expressao.sds
-  3 -> branches.sds
-  4 -> iteracao.sds
-  5 -> lambda.sds
-  6 -> fatorial.sds
-  7 -> erro_lexico.sds
-  8 -> erro_sintatico.sds
-  9 -> booleano.sds
-  10 -> while.sds
+Foram incluídos, na pasta `tests/`, alguns programas prontos na linguagem fantasia que podem ser executados com `npx ts-node src/index.ts <NÚMERO>`.
+
+O mapeamento atual é:
+  1 -> `ola.sds`
+  2 -> `expressao.sds`
+  3 -> `branches.sds`
+  4 -> `iteracao.sds`
+  5 -> `lambda.sds`
+  6 -> `fatorial.sds`
+  7 -> `logicos.sds`
+  8 -> `while.sds`
+  9 -> `booleano.sds`
+  10 -> `erro_lexico.sds`
+  11 -> `erro_sintatico.sds`

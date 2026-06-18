@@ -3,5 +3,5 @@ node_modules/
 outputs/
 outputs/tokens.txt
 outputs/ast.txt
-outputs/code.c
+outputs/main.c
 a.out
