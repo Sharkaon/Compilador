@@ -1,3 +1,10 @@
+# Integrantes
+* Artur Monteiro
+* Diogo Saldanha
+* Isaac dos Santos
+* Rafael Schneider
+* Willian Ribas
+
 ## Convenções
 ...? : opcional
 ...* : zero ou mais repetições
