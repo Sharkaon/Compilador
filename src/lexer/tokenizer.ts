@@ -28,6 +28,9 @@ export class Tokenizer {
       case '*':  return 'TIMES';
       case '/':  return 'DIVISION';
       case '->': return 'ARROW';
+      case '&&': return 'AND';
+      case '||': return 'OR';
+      case '!':  return 'NOT';
     }
     switch (lexeme) {
       case '(': return 'LPAREN';
@@ -41,7 +44,6 @@ export class Tokenizer {
       case ':': return 'COLON';
     }
     return 'IDENT';
-    // Implementation for classifying lexemes
   }
 
   private static isNumberLexeme(lexeme: string): boolean {

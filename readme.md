@@ -36,7 +36,13 @@ condição         = igualdade
 bloco            = '{' declaração* '}'
 
 ## Expressões (com precedência)
-expressão        = igualdade
+expressão        = atribuiçãoExpr
+
+atribuiçãoExpr = IDENT '=' (atribuiçãoExpr | ouLogico)
+
+ouLogico         = eLogico ( '||' eLogico )*
+
+eLogico          = igualdade ( '&&' igualdade )*
 
 igualdade        = relacional ( ('==' | '!=') relacional )*
 
@@ -44,7 +50,10 @@ relacional       = aditiva ( ('<' | '>' | '<=' | '>=') aditiva )*
 
 aditiva          = termo ( ('+' | '-') termo )*
 
-termo            = fator ( ('*' | '/') fator )*
+termo            = unario ( ('*' | '/') unario )*
+
+unario           = '!' unario
+                 | fator
 
 fator            = NUMBER
                  | STRING
@@ -88,6 +97,7 @@ branches, iterate, while, return, number, string, boolean, true, false
 '='  '=='  '!='  '<'  '>'  '<='  '>='
 '+'  '-'  '*'  '/'
 '('  ')'  '{'  '}'  ';'  ','  ':'  '->'
+'&&'  '||'  '!'
 
 # Como Rodar
 

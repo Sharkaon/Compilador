@@ -1,0 +1,24 @@
+a = 10;
+b = 5;
+
+resultado = a > 3 && b < 10;
+escrever(resultado);
+
+resultado = a > 100 || b < 10;
+escrever(resultado);
+
+resultado = !false;
+escrever(resultado);
+
+resultado = !true;
+escrever(resultado);
+
+resultado = !(a > 100) && b < 10;
+escrever(resultado);
+
+estaNaFaixa = (x: number, min: number, max: number) -> boolean {
+    return x >= min && x <= max;
+};
+
+escrever(estaNaFaixa(15, 10, 20));
+escrever(estaNaFaixa(5, 10, 20));

@@ -36,7 +36,6 @@ export class Parser {
     return this.peek().type === type;
   }
 
-  // Consome um token se ele for de qualquer um dos tipos passados
   private consumeIfIs(...types: TokenType[]): boolean {
     for (const type of types) {
       if (this.check(type)) {
@@ -122,7 +121,7 @@ export class Parser {
     const branches: ast.Branch[] = [];
     while (this.check('LPAREN') || (this.check('ARROW') && branches.length > 0)) {
       if (this.check('LPAREN')) {
-        this.advance(); // consome '('
+        this.advance();
         const condition = this.parseExpression();
         this.consume('RPAREN', "Expected ')' after branch condition");
         this.consume('ARROW', "Expected '->' after condition");
@@ -147,7 +146,6 @@ export class Parser {
     return { type: 'Block', declarations };
   }
 
-  // Parseamento das expressões respeitando o nível de precedência
   private parseExpression(): ast.Expression {
     return this.parseAssignmentExpression();
   }
@@ -157,10 +155,28 @@ export class Parser {
       const idToken = this.consume('IDENT', 'Expected identifier');
       const left: ast.Identifier = { type: 'Identifier', name: idToken.lexeme };
       this.consume('ASSIGN', "Expected '='");
-      const right = this.parseAssignmentExpression(); // lado direito pode ser outra atribuição
+      const right = this.parseAssignmentExpression();
       return { type: 'AssignmentExpression', left, right };
     }
-    return this.parseEqualityExpression();
+    return this.parseOrExpression();
+  }
+
+  private parseOrExpression(): ast.Expression {
+    let left = this.parseAndExpression();
+    while (this.consumeIfIs('OR')) {
+      const right = this.parseAndExpression();
+      left = { type: 'LogicalExpression', left, operator: '||', right };
+    }
+    return left;
+  }
+
+  private parseAndExpression(): ast.Expression {
+    let left = this.parseEqualityExpression();
+    while (this.consumeIfIs('AND')) {
+      const right = this.parseEqualityExpression();
+      left = { type: 'LogicalExpression', left, operator: '&&', right };
+    }
+    return left;
   }
 
   private parseEqualityExpression(): ast.Expression {
@@ -201,13 +217,21 @@ export class Parser {
   }
 
   private parseMultiplicativeExpression(): ast.Expression {
-    let left: ast.Expression = this.parsePrimaryExpression();
+    let left: ast.Expression = this.parseUnaryExpression();
     while (this.consumeIfIs('TIMES', 'DIVISION')) {
       const operator = this.previous().type === 'TIMES' ? '*' : '/';
-      const right = this.parsePrimaryExpression();
+      const right = this.parseUnaryExpression();
       left = { type: 'MultiplicativeExpression', left, operator, right };
     }
     return left;
+  }
+
+    private parseUnaryExpression(): ast.Expression {
+    if (this.consumeIfIs('NOT')) {
+      const operand = this.parseUnaryExpression();
+      return { type: 'UnaryExpression', operator: '!', operand };
+    }
+    return this.parsePrimaryExpression();
   }
 
   private parsePrimaryExpression(): ast.PrimaryExpression {
@@ -264,7 +288,6 @@ export class Parser {
     const savedPos = this.current;
     try {
       this.consume('LPAREN', "Expected '('");
-      // Parâmetros: IDENT ':' tipo (',' IDENT ':' tipo)*
       while (!this.check('RPAREN')) {
         if (!this.check('IDENT')) return false;
         this.advance();
