@@ -699,6 +699,7 @@ export class SemanticAnalyzer {
 
   private dataTypeToCType(type: DataType): string {
     if (type === 'number') return 'int';
+    if (type === 'boolean') return 'int';
     if (type === 'string') return 'char*';
     return 'void*';
   }
