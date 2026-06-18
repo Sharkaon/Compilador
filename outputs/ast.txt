@@ -50,12 +50,12 @@
       }
     },
     {
-      "type": "WhileStmt",
-      "condition": {
-        "type": "RelationalExpression",
-        "left": {
+      "type": "ExprStmt",
+      "expression": {
+        "type": "FunctionCall",
+        "callee": {
           "type": "Identifier",
-          "name": "contador"
+          "name": "escrever"
         },
         "arguments": [
           {

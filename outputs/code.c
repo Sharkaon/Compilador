@@ -7,7 +7,7 @@ int __lambda_0(int x, int min, int max) {
 }
 
 int main() {
-    void* (*estaNaFaixa)(int, int, int);
+    int (*estaNaFaixa)(int, int, int);
 
     int a, b, resultado;
     

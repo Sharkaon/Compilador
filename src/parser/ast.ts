@@ -8,7 +8,7 @@ export type Declaration =
   | ExprStmt
   | BranchesStmt
   | IterateStmt
-  | EnquantoStmt
+  | WhileStmt
   | ReturnStmt;
 
 export interface IterateStmt {

@@ -127,7 +127,7 @@ export class SemanticAnalyzer {
       this.emit(`int ${numberVars.join(', ')};`);
     }
     if (stringVars.length > 0) {
-      this.emit(`char* ${stringVars.join(', ')};`);
+      this.emit(`char ${stringVars.join(', ')};`);
     }
     if (numberVars.length > 0 || stringVars.length > 0) {
       this.emit('');
