@@ -35,7 +35,6 @@ export class VariableCollector {
           returnType: this.typeAnnotationToDataType(lambda.returnType)
         };
         this.functionVariables.set(decl.identifier, signature);
-        // Registra a lambda para geração posterior
         const lambdaName = `__lambda_${this.lambdaId++}`;
         this.lambdas.set(lambdaName, lambda);
         this.lambdaOriginalNames.set(lambdaName, decl.identifier);
@@ -71,16 +70,12 @@ export class VariableCollector {
   private visitExpression(expr: ast.Expression): void {
     switch (expr.type) {
       case 'NumberLiteral':
-        // Número literal não adiciona variável
         break;
       case 'StringLiteral':
-        // String literal não adiciona variável
         break;
       case 'BooleanLiteral':
         break;
       case 'Identifier':
-        // Identificador: registra a variável com tipo padrão 'number'
-        // (será atualizado se houver uma atribuição posterior)
         const skipIfExiting = true;
         this.recordVariable(expr.name, 'number', skipIfExiting);
         break;
@@ -88,7 +83,6 @@ export class VariableCollector {
         this.visitExpression(expr.expression);
         break;
       case 'AssignmentExpression':
-        // Lado esquerdo é um identificador
         const inferredRightType = this.inferExpressionType(expr.right);
         this.recordVariable(expr.left.name, inferredRightType);
         this.visitExpression(expr.right);
@@ -100,7 +94,7 @@ export class VariableCollector {
         this.visitExpression(expr.left);
         this.visitExpression(expr.right);
         break;
-      case 'LogicalExpression':           // NOVO
+      case 'LogicalExpression':
         this.visitExpression(expr.left);
         this.visitExpression(expr.right);
         break;
@@ -115,7 +109,6 @@ export class VariableCollector {
       case 'LambdaExpression':
         const lambdaName = `__lambda_${this.lambdaId++}`;
         this.lambdas.set(lambdaName, expr);
-        // Não coletamos variáveis do corpo agora, faremos depois
         break;
     }
   }
@@ -130,7 +123,7 @@ export class VariableCollector {
         return 'boolean';
       case 'Identifier': {
         const existing = this.variables.get(expr.name);
-        return existing || 'number'; // fallback para number se não encontrado
+        return existing || 'number';
       }
       case 'ParenthesizedExpression':
         return this.inferExpressionType(expr.expression);
@@ -141,19 +134,18 @@ export class VariableCollector {
       case 'AdditiveExpression':
         const leftType = this.inferExpressionType(expr.left);
         const rightType = this.inferExpressionType(expr.right);
-        // Se algum lado for string, resultado é string
         if (leftType === 'string' || rightType === 'string') {
           return 'string';
         }
         return 'number';
       case 'MultiplicativeExpression':
-        return 'number'; // operações aritméticas retornam number
+        return 'number';
       case 'LogicalExpression':
         return 'number';
       case 'UnaryExpression':
         return 'number';
       case 'FunctionCall':
-        return 'number'; // assumimos que funções retornam number
+        return 'number';
       case 'LambdaExpression':
         return 'function';
       default:

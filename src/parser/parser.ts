@@ -36,7 +36,6 @@ export class Parser {
     return this.peek().type === type;
   }
 
-  // Consome um token se ele for de qualquer um dos tipos passados
   private consumeIfIs(...types: TokenType[]): boolean {
     for (const type of types) {
       if (this.check(type)) {
@@ -122,7 +121,7 @@ export class Parser {
     const branches: ast.Branch[] = [];
     while (this.check('LPAREN') || (this.check('ARROW') && branches.length > 0)) {
       if (this.check('LPAREN')) {
-        this.advance(); // consome '('
+        this.advance();
         const condition = this.parseExpression();
         this.consume('RPAREN', "Expected ')' after branch condition");
         this.consume('ARROW', "Expected '->' after condition");
@@ -147,7 +146,6 @@ export class Parser {
     return { type: 'Block', declarations };
   }
 
-  // Parseamento das expressões respeitando o nível de precedência
   private parseExpression(): ast.Expression {
     return this.parseAssignmentExpression();
   }
@@ -157,7 +155,7 @@ export class Parser {
       const idToken = this.consume('IDENT', 'Expected identifier');
       const left: ast.Identifier = { type: 'Identifier', name: idToken.lexeme };
       this.consume('ASSIGN', "Expected '='");
-      const right = this.parseAssignmentExpression(); // lado direito pode ser outra atribuição
+      const right = this.parseAssignmentExpression();
       return { type: 'AssignmentExpression', left, right };
     }
     return this.parseOrExpression();
@@ -290,7 +288,6 @@ export class Parser {
     const savedPos = this.current;
     try {
       this.consume('LPAREN', "Expected '('");
-      // Parâmetros: IDENT ':' tipo (',' IDENT ':' tipo)*
       while (!this.check('RPAREN')) {
         if (!this.check('IDENT')) return false;
         this.advance();

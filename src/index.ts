@@ -25,14 +25,20 @@ if (!chosenText) {
 }
 
 const src = readFileSync(chosenText, 'utf-8');
+
+const compilationStart = Date.now();
+
 const tokens = new Lexer(src).processSource();
 writeFileSync('outputs/tokens.txt', JSON.stringify(tokens, null, 2));
-console.log(tokens);
 
 const ast = new Parser(tokens).parseProgram();
 writeFileSync('outputs/ast.txt', JSON.stringify(ast, null, 2));
-console.log(ast);
 
 const cCode = new SemanticAnalyzer().analyze(ast);
 writeFileSync('outputs/code.c', cCode);
-console.log(cCode);
+const compilationTimeMs = Date.now() - compilationStart;
+console.log(
+  `Compilacao concluida em ${compilationTimeMs} ms.\n` +
+  `Saida gerada em: outputs/code.c\n` +
+  `Execute com: npm run run-compiled`
+);

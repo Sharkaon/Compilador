@@ -44,7 +44,6 @@ export class Tokenizer {
       case ':': return 'COLON';
     }
     return 'IDENT';
-    // Implementation for classifying lexemes
   }
 
   private static isNumberLexeme(lexeme: string): boolean {
