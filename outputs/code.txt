@@ -1,1 +1,0 @@
-"#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    strcpy(saudacao, \"Olá, mundo!\");\n    printf(\"%s\\n\", saudacao);\n}"
