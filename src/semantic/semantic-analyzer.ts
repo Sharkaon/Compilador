@@ -96,16 +96,6 @@ export class SemanticAnalyzer {
   }
 
   private generateGlobalVariables() {
-    const numberVars: string[] = [];
-    const stringVars: string[] = [];
-    for (const [varName, type] of this.globalVariables) {
-      if (type === 'string') {
-        stringVars.push(`${varName}[256]`);
-      } else if (type === 'number' || type === 'boolean') {
-        numberVars.push(varName);
-      }
-    }
-
     for (const [name, sig] of this.functionVariables) {
       const returnTypeC = this.dataTypeToCType(sig.returnType);
       const paramTypesC = sig.paramTypes.map(t => this.typeAnnotationToCType(t)).join(', ');
@@ -113,13 +103,12 @@ export class SemanticAnalyzer {
       this.emit(`${pointer};\n`);
     }
 
-    if (numberVars.length > 0) {
-      this.emit(`int ${numberVars.join(', ')};`);
+    const declarations = this.buildVariableDeclarations(this.globalVariables);
+    for (const declaration of declarations) {
+      this.emit(declaration);
     }
-    if (stringVars.length > 0) {
-      this.emit(`char ${stringVars.join(', ')};`);
-    }
-    if (numberVars.length > 0 || stringVars.length > 0) {
+
+    if (declarations.length > 0) {
       this.emit('');
     }
   }
@@ -189,14 +178,11 @@ export class SemanticAnalyzer {
     
     const paramNames = new Set(lambda.parameters.map(p => p.name));
     const localVars = this.collectLocalVariables(lambda.body, paramNames);
-    if (localVars.size > 0) {
-      const numberVars: string[] = [];
-      const stringVars: string[] = [];
-      for (const v of localVars) {
-        numberVars.push(`int ${v}`);
+    const localDeclarations = this.buildVariableDeclarations(localVars);
+    if (localDeclarations.length > 0) {
+      for (const declaration of localDeclarations) {
+        lines.push(this.indent() + declaration);
       }
-      if (numberVars.length) lines.push(this.indent() + numberVars.join(', ') + ';');
-      if (stringVars.length) lines.push(this.indent() + stringVars.join(', ') + ';');
       lines.push('');
     }
     
@@ -222,12 +208,37 @@ export class SemanticAnalyzer {
     return lines.join('\n');
   }
 
-  private collectLocalVariables(block: ast.Block, paramNames: Set<string> = new Set()): Set<string> {
+  private collectLocalVariables(block: ast.Block, paramNames: Set<string> = new Set()): Map<string, DataType> {
     const collector = new VariableCollector();
     collector.setIgnoredNames(paramNames);
     const fakeProgram: ast.Program = { type: 'Program', declarations: block.declarations };
     collector.collect(fakeProgram);
-    return new Set(collector.getVariables().keys());
+    return collector.getVariables();
+  }
+
+  private buildVariableDeclarations(variables: Map<string, DataType>): string[] {
+    const numberVars: string[] = [];
+    const stringVars: string[] = [];
+
+    for (const [varName, type] of variables) {
+      if (type === 'string') {
+        stringVars.push(`${varName}[256]`);
+        continue;
+      }
+
+      if (type === 'number' || type === 'boolean') {
+        numberVars.push(varName);
+      }
+    }
+
+    const declarations: string[] = [];
+    if (numberVars.length > 0) {
+      declarations.push(`int ${numberVars.join(', ')};`);
+    }
+    if (stringVars.length > 0) {
+      declarations.push(`char ${stringVars.join(', ')};`);
+    }
+    return declarations;
   }
 
   private generateBlockCode(block: ast.Block, isTopLevel: boolean = false): string {
